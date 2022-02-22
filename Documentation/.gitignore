@@ -1,0 +1,8 @@
+*.bbl
+*.blg
+*.bcf
+*.bclg
+*.out
+*.run.xml
+*.log
+auto/

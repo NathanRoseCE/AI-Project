@@ -1,5 +1,12 @@
 \documentclass[11pt]{article}
 
+\usepackage[backend=biber,style=ieee]{biblatex}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+}
+\addbibresource{resources.bib}
+
 \title{Some Title}
 \author{Nathan, JP}
 \date{\today}
@@ -31,6 +38,9 @@ game will be created. This game will allow human vs AI(for testing) and AI vs AI
   approach?)
 \item Identify any planned libraries, resources, etc. you intend to utilize to facilitate your approach
 \end{enumerate}
+In order to train the model, the system will be forced to play against itself in order to improve its skills,
+this unsupervised approach is used as the system does not have labeled correct plays, due to hidden information.
+One possible method of training could be NEAT\cite{NEAT} where neurons are added in between generations.
 
 \section{Team Structure}
 \begin{enumerate}
@@ -38,6 +48,7 @@ game will be created. This game will allow human vs AI(for testing) and AI vs AI
 \item Identifies any relevant background of team member(s) to the problem, if applicable
 \item Identifies roles and responsibilities of team members
 \end{enumerate}
+uhhhhhh we should probably meet about this
 
 \section{Refferences}
 \begin{enumerate}
@@ -45,4 +56,5 @@ game will be created. This game will allow human vs AI(for testing) and AI vs AI
   etc. used in this write-up
 \item Citations and inline references are in IEEE format
 \end{enumerate}
+\printbibliography
 \end{document}
