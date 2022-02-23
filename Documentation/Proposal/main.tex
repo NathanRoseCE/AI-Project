@@ -21,7 +21,7 @@
   etc.)
 \end{enumerate}
 
-The goal of the project is to train an AI to be very good at poker(Texas Holdem), in order to do this a poker
+The goal of the project is to train an AI to be very good at poker(Texas Holdem \cite{TexasHoldEm}), in order to do this a poker
 game will be created. This game will allow human vs AI(for testing) and AI vs AI(for training).
 
 \section{Proposed Approach}
@@ -41,6 +41,10 @@ game will be created. This game will allow human vs AI(for testing) and AI vs AI
 In order to train the model, the system will be forced to play against itself in order to improve its skills,
 this unsupervised approach is used as the system does not have labeled correct plays, due to hidden information.
 One possible method of training could be NEAT\cite{NEAT} where neurons are added in between generations.
+
+The AI will be rewarded based on winning hands and gaining the most money. Potentially making good folds as well.
+
+We plan on using TensorFlow and Keras to facilitate the reinforcement learning.
 
 \section{Team Structure}
 \begin{enumerate}
