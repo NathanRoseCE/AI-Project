@@ -23,7 +23,7 @@
 
 The goal of the project is to train an AI to be very good at poker(Texas Holdem \cite{TexasHoldEm}),
 in order to do this a poker game will be created. This game will allow human vs AI(for testing) and AI vs AI(
-for training).
+for training). In order to simplify the training, the game will only feature 5 players.
 
 \section{Proposed Approach}
 300 words max
@@ -40,10 +40,12 @@ for training).
 \item Identify any planned libraries, resources, etc. you intend to utilize to facilitate your approach
 \end{enumerate}
 In order to train the model, the system will be forced to play against itself in order to improve its skills,
-this unsupervised with reinforcement learning approach is used as the system does not have labeled correct plays,
-due to hidden information. One possible method of training could be NEAT\cite{NEAT} where neurons are added in
-between generations. The AI will be rewarded based on gaining the most money overe a set number of rounds. 
+this unsupervised with reinforcement learning approach is used as the system does not have labeled correct
+plays, due to hidden information. One possible method of training could be NEAT\cite{NEAT} where neurons are
+added in between generations. The AI will be rewarded based on gaining the most money overe a set number of rounds.
 
+To train the AI will be given information about its hand, the cards currently available, the pot ammount, and
+each player's bet ammount. It will be evaluated based off the money the AI has after 10 rounds.
 
 \section{Team Structure}
 \begin{enumerate}
@@ -70,14 +72,13 @@ we will make sure we are logging who closed issues for end evalution.
   \item Passion and understanding of Texas Hold'em poker
   \item Experience with with system design, implementation and testing complete process/lifecycle
   \item Agile Scrum Experience
-
   \end{enumerate}
 \end{enumerate}
 \subsection{Roles and Responsibiltes}
 \begin{enumerate}
 \item Nathan
   \begin{enumerate}
-  \item manage repo
+  \item Repo Manager
   \item developers
   \end{enumerate}
 \item JP
