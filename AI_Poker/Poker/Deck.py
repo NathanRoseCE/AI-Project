@@ -3,20 +3,17 @@ from itertools import permutations
 from itertools import product
 import numpy as np
 
-class Shoe:
+class Deck:
     """
     impliments all the logic for a shoe(card handler) can handle any number of shoes
     """
-    def __init__(self, shuffled:bool=True, num_decks:int=1) -> None:
-        num_decks = int(num_decks)
+    def __init__(self, shuffled:bool=True) -> None:
         shuffle=bool(shuffled)
         self._active_cards = []
         self._used_cards = []
-        card_perms = list(product(CardValue, CardSuit))
-        for _ in range(num_decks):
-            self._active_cards += [
-                Card(suit, value) for value, suit in card_perms
-            ]
+        self._active_cards += [
+            Card(suit, value) for value, suit in list(product(CardValue, CardSuit))
+        ]
         if shuffle:
             self.shuffle()
                 
