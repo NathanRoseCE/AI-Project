@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Defines all card related items
 """
@@ -55,5 +56,15 @@ class Card:
         gets the card's value
         """
         return self._value
+
+    def __eq__(self, o: Card) -> None:
+        if not isinstance(o, Card):
+            return False
+        return ( (o.suit == self.suit) and
+                 (o.value == self.value))
     
+    def __str__(self) -> str:
+        return f"{self.value} of {self.suit}"
     
+    def __hash__(self):
+      return hash((self.value, self.suit))
