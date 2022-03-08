@@ -1,4 +1,4 @@
-- Create Player
+- Create Player - JP
  - human and AI variants
  - ability to fold/check/call/bet/raise
  - view poker
@@ -12,7 +12,7 @@
  - to_matrix
  - track folder
  - calculate side pots
-- Poker Rules
+- Poker Rules - JP
  - determine hand value
  - determine winner
 - AI
