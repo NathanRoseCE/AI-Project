@@ -27,4 +27,10 @@ def test_deal_cards() -> None:
     assert cards[2] in players[2].hand 
     assert cards[3] in players[0].hand 
     assert cards[4] in players[1].hand 
-    assert cards[5] in players[2].hand 
+    assert cards[5] in players[2].hand
+    
+    assert cards[6] in board.global_state()["community_cards"]
+    assert cards[7] in board.global_state()["community_cards"]
+    assert cards[8] in board.global_state()["community_cards"]
+    assert cards[9] in board.global_state()["community_cards"]
+    assert cards[10] in board.global_state()["community_cards"]
