@@ -1,0 +1,21 @@
+- Create Player
+ - human and AI variants
+ - ability to fold/check/call/bet/raise
+ - view poker
+- Board
+ - betting order
+ - pot ammount
+ - transaction history
+ - cards
+ - burnt cards
+ - winner
+ - to_matrix
+ - track folder
+ - calculate side pots
+- Poker Rules
+ - determine hand value
+ - determine winner
+- AI
+ - setup NEAT
+ - set up reward function
+ - TRAIN/optimize
