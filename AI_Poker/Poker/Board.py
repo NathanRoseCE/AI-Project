@@ -38,7 +38,9 @@ class Board:
     def __init__(self,
                  players: Iterable[Player],
                  scoring_rules: Iterable[RuleScoring],
-                 deck: Deck
+                 deck: Deck,
+                 big_blind_ammount=30,
+                 little_blind_ammount=20
                  ) -> None:
         if len(players) > Board.MAX_PLAYERS:
             raise ValueError(f"Cant play with more than {Board.MAX_PLAYERS}")
@@ -47,6 +49,8 @@ class Board:
         self._deck = deck
         self._community_cards = []
         self._starting_player = 0
+        self._big_blind_ammount = big_blind_ammount
+        self._little_blind_ammount = little_blind_ammount
 
     def hand(self) -> None:
         """
@@ -62,12 +66,14 @@ class Board:
         """
         logging.info(f"dealing cards to {len(self._active_players)} players")
         hands = []
+        # TODO start with small blind
+        # TODO do a rotate little_blind positions then iterate through it twice
+        # to start dealing with little blind
         for _ in range(len(self._active_players)):
             hands.append([self._deck.next_card()])
         for i, _ in enumerate(range(len(self._active_players))):
             hands[i].append(self._deck.next_card())
             
-        #TODO start with small blind
         for i, player in enumerate(self._active_players):
             player.hand = hands[i]
 
@@ -81,14 +87,15 @@ class Board:
         Ask all of the players for thier bets
         """
         ask_player = starting_player
-        bet_min = -1#TODO: set up big and little blind
+        bet_min = -1
         highest_bet_index=-1
         while True:
             if highest_bet_index == ask_player:
                 break
-            bet = self._active_players[ack_player].make_decision(
-                self.global_state(), bet_min
+            bet = self._active_players[ask_player].make_decision(
+                self.global_state, bet_min
             )
+            assert bet >= bet_min
             if bet > bet_min:
                 min_bet = bet
                 highest_bet_index = ask_player
@@ -125,7 +132,8 @@ class Board:
         # is there only one player left?
         return len(self._active_players) == 1
 
-    def global_state(self) -> np.array:
+    @property
+    def global_state(self) -> dict:
         """
         Gets all information and puts it in a dictionary for either
         a human player or an AI
@@ -137,11 +145,28 @@ class Board:
     @property
     def big_blind(self) -> int:
         """
-        Gets the big blind for the game
+        returns the index of the big blind for the current hand
         """
         return self.starting_player
 
     @property
     def little_blind(self) -> int:
+        """
+        returns the index of the little blind for the current hand
+        """
         return self._next_player_from(self.starting_player)
+
+    @property
+    def big_blind_ammount(self) -> float:
+        """
+        Returns the big blind ammount for this hand
+        """
+        return self._big_blind_ammount
+    
+    @property
+    def little_blind_ammount(self) -> float:
+        """
+        Returns the little blind ammount for this hand
+        """
+        return self._little_blind_ammount
         
