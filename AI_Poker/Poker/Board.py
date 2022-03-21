@@ -87,17 +87,14 @@ class Board:
         Ask all of the players for thier bets
         """
         ask_player = starting_player
-        bet_min = -1
+        bet_min = 0
         highest_bet_index=-1
         while True:
             if highest_bet_index == ask_player:
                 break
-            bet = self._active_players[ask_player].make_decision(
-                self.global_state, bet_min
-            )
-            # assert bet >= bet_min
-            if bet > bet_min:
-                min_bet = bet
+            bet, new_bet_min = self.ask_player_for_bid(ask_player, bet_min)
+            if new_bet_min > bet_min:
+                bet_min = new_bet_min
                 highest_bet_index = ask_player
             ask_player = self._next_player_from(ask_player)
 
@@ -190,6 +187,3 @@ class Board:
         if (player_index == self.little_blind) and (bet == self.little_blind_ammount):
             new_global_min = global_min
         return bet, new_global_min
-            
-        
-        
