@@ -34,3 +34,100 @@ def test_deal_cards() -> None:
     assert cards[8] in board.global_state()["community_cards"]
     assert cards[9] in board.global_state()["community_cards"]
     assert cards[10] in board.global_state()["community_cards"]
+
+def test_starting_player() -> None:
+    player_one = Player(
+        start_money=10000
+    )
+    player_two = Player(
+        start_money=10000
+    )
+    player_three = Player(
+        start_money=10000
+    )
+    players = [
+        player_one,
+        player_two,
+        player_three
+    ]
+    deck = Deck()
+    board = Board(
+        players=players,
+        scoring_rules=[],
+        deck=deck
+    )
+
+    assert board.starting_player == 0
+    board.hand()
+    assert board.starting_player == 1
+    board.hand()
+    assert board.starting_player == 2
+    board.hand()
+    assert board.starting_player == 0
+    board.hand()
+
+    
+
+def test_big_blind() -> None:
+    player_one = Player(
+        start_money=10000
+    )
+    player_two = Player(
+        start_money=10000
+    )
+    player_three = Player(
+        start_money=10000
+    )
+    players = [
+        player_one,
+        player_two,
+        player_three
+    ]
+    deck = Deck()
+    board = Board(
+        players=players,
+        scoring_rules=[],
+        deck=deck
+    )
+
+    assert board.big_blind == 0
+    board.hand()
+    assert board.big_blind == 1
+    board.hand()
+    assert board.big_blind == 2
+    board.hand()
+    assert board.big_blind == 0
+    board.hand()
+
+    
+
+def test_little_blind() -> None:
+    player_one = Player(
+        start_money=10000
+    )
+    player_two = Player(
+        start_money=10000
+    )
+    player_three = Player(
+        start_money=10000
+    )
+    players = [
+        player_one,
+        player_two,
+        player_three
+    ]
+    deck = Deck()
+    board = Board(
+        players=players,
+        scoring_rules=[],
+        deck=deck
+    )
+
+    assert board.little_blind == 1
+    board.hand()
+    assert board.little_blind == 2
+    board.hand()
+    assert board.little_blind == 0
+    board.hand()
+    assert board.little_blind == 1
+    board.hand()

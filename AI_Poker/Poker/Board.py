@@ -46,12 +46,14 @@ class Board:
         self._rules = scoring_rules
         self._deck = deck
         self._community_cards = []
+        self._starting_player = 0
 
     def hand(self) -> None:
         """
         plays one hand of poker, assume the deck is set up correctly
         """
         self._deal_cards()
+        self._end_hand()
         
 
     def _deal_cards(self) -> None:
@@ -92,12 +94,13 @@ class Board:
                 highest_bet_index = ask_player
             ask_player = self._next_player_from(ask_player)
 
-    def _starting_player(self) -> int:
+    @property
+    def starting_player(self) -> int:
         """
         Gets the player who has to put the big blind down
         """
         #todo have this rotate after each hand
-        return 0
+        return self._starting_player
 
     def _next_player_from(self, start_from: int) -> int:
         """
@@ -107,6 +110,13 @@ class Board:
         if next_player >= len(self._active_players):
             next_player = 0
         return next_player
+
+    def _end_hand(self) -> None:
+        """
+        This function is used for any logic that is used at the end of a hand
+        """
+        self._starting_player = self._next_player_from(self.starting_player)
+        
 
     def is_game_over(self) -> bool:
         """
@@ -123,4 +133,15 @@ class Board:
         return {
             "community_cards": self._community_cards
         }
-                                 
+
+    @property
+    def big_blind(self) -> int:
+        """
+        Gets the big blind for the game
+        """
+        return self.starting_player
+
+    @property
+    def little_blind(self) -> int:
+        return self._next_player_from(self.starting_player)
+        
