@@ -1,4 +1,4 @@
-from typing import Iterable
+from typing import Iterable, Tuple
 from AI_Poker.Poker.Card import Card
 from AI_Poker.Poker.Deck import Deck
 import numpy as np
@@ -95,7 +95,7 @@ class Board:
             bet = self._active_players[ask_player].make_decision(
                 self.global_state, bet_min
             )
-            assert bet >= bet_min
+            # assert bet >= bet_min
             if bet > bet_min:
                 min_bet = bet
                 highest_bet_index = ask_player
@@ -169,4 +169,27 @@ class Board:
         Returns the little blind ammount for this hand
         """
         return self._little_blind_ammount
+
+    def ask_player_for_bid(self, player_index: int, global_min: float) -> Tuple[float, float]:
+        """
+        asks the player for thier bid(taking into account big and little blind), 
+        returns bid_ammount, new_global_min
+        """
+        bet_min = global_min
+        if player_index == self.big_blind:
+            bet_min = self.big_blind_ammount if self.big_blind_ammount > bet_min else bet_min
+        if player_index == self.little_blind:
+            bet_min = self.little_blind_ammount if self.little_blind_ammount > bet_min else bet_min    
+        bet = self._active_players[player_index].make_decision(
+            self.global_state, bet_min
+        )
+        assert bet >= bet_min
+        new_global_min = bet
+        if (player_index == self.big_blind) and (bet == self.big_blind_ammount):
+            new_global_min = global_min
+        if (player_index == self.little_blind) and (bet == self.little_blind_ammount):
+            new_global_min = global_min
+        return bet, new_global_min
+            
+        
         
