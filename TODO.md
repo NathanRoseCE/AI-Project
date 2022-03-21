@@ -14,6 +14,7 @@
  - calculate side pots
 - Poker Rules - JP
  - determine hand value
+  - how to value hands sub hands ex. two players have pairs which is better pair?
  - determine winner
 - AI
  - setup NEAT
