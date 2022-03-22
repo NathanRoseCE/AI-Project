@@ -25,30 +25,22 @@ class HandValue:
         
     def isRoyalFlush(self):
         print("Royal Flush")
-        for suit in self.cardSuits:
-            if (self.cardSuits[suit]==5):
-                for i in range(10, 15):
-                    if (self.cardValues!=1):
-                        return False
-                return True
-            else:
-                return False
+        if(self.isFlush()):
+            for i in range(10, 15):
+                if (self.cardValues!=1):
+                    return False
+            return True
+        else:
+            return False
 
-    #this feels gross and clunky but good enough for now
-    #might want to break up into is straight function but will only be used twice....
+    # fixed can also simplify to
+    # return (self.isFlush() and self.isStraight())
     def isStraightFlush(self):
         print("Straight Flush")
-        for suit in self.cardSuits:
-            if (self.cardSuits[suit]==5):
-                for i in range(2, 14):
-                    if (self.cardValues[i]==1):
-                        for j in range(i+1, i+4):
-                            if (self.cardValues[j]!=1):
-                                return False
-                        return True
-            else:
-                return False
-
+        if (self.isFlush() and self.isStraight()):
+            return True
+        else:
+            return False
 
     def isQuads(self):
         print("Quads")
@@ -60,7 +52,10 @@ class HandValue:
 
     def isFullHouse(self):
         print("Full House")
-
+        if(self.isTrips() and self.isTwoPair()):
+            return True
+        else:
+            return False
 
     def isFlush(self):
         print("Flush")
@@ -89,6 +84,11 @@ class HandValue:
 
     def isTwoPair(self):
         print("Two Pair")
+        numOfPairs = 0
+        for card in self.cardValues:
+            if (self.cardValues[card]==2):
+                numOfPairs+=1
+        return numOfPairs==2
 
     def isPair(self):
         print("Pair")
@@ -100,6 +100,12 @@ class HandValue:
 
     def isHighCard(self):
         print("High Card")
+        maxValue = 0
+        for card in self.cardValues:
+            if (self.cardValues[card]==1 and self.cardValues[card]>maxValue):
+                maxValue=self.cardValues[card]
+        print("Highest Card is: ", maxValue)
+        return True
 
     def determineHandValue(self):
         self.evalCardValues()
@@ -124,9 +130,6 @@ class HandValue:
             print(2)
         elif (self.isHighCard()):
             print(1)
-
-
-
 
     def valueHand(self, cards):
         self.cards = cards
