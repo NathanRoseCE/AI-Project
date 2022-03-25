@@ -10,7 +10,7 @@ class Player:
         self.money = start_money
         self.hand = []
 
-    def make_decision(bet_minimum: float, global_state: dict) -> float:
+    def make_decision(self, bet_minimum: float, global_state: dict) -> float:
         """
         returns the bet the player would like to make
         """
@@ -30,6 +30,55 @@ class RuleScoring:
         """
         return self._score
 
+class PlayerWrapper:
+    """
+    This class is a simple wrapper to handle the player and 
+    grab some extra meta data about the player
+    """
+    def __init__(self, player: Player) -> None:
+        self._player = player
+        self._bet_ammount = 0
+
+    @property
+    def public_info(self) -> dict:
+        """
+        Gets the public information about the player
+        """
+        return {
+            "bet": self._bet_ammount
+        }
+
+    def make_decision(self, *args, **dargs):
+        """
+        returns the bet the player would like to make
+        """
+        self._bet_ammount = self._player.make_decision(*args, **dargs)
+        return self._bet_ammount
+
+    def close_hand(self, money_won: float=0) -> None:
+        """
+        closes the hand, using the money won as a increase in the bet ammount
+        """
+        self._player.money += money_won
+        self._bet_ammount = 0
+
+    @property
+    def hand(self) -> Iterable[Card]:
+        """
+        gets the hand from the player object
+        """
+        return self._player.hand
+
+    @hand.setter
+    def hand(self, hand: Iterable[Card]) -> None:
+        """
+        sets the hand for the player object
+        """
+        self._player.hand = hand
+
+    
+
+
 class Board:
     """
     This is the main class that tracks all of the information and runs a game
@@ -44,7 +93,9 @@ class Board:
                  ) -> None:
         if len(players) > Board.MAX_PLAYERS:
             raise ValueError(f"Cant play with more than {Board.MAX_PLAYERS}")
-        self._active_players = players
+        self._active_players = [
+            PlayerWrapper(player) for player in players
+        ]
         self._rules = scoring_rules
         self._deck = deck
         self._community_cards = []
@@ -58,7 +109,12 @@ class Board:
         """
         self._deal_cards()
         self._end_hand()
-        
+
+    def round(self) -> None:
+        """
+        Handles one betting round within a hand
+        """
+        self._ask_for_bets(self.big_blind)
 
     def _deal_cards(self) -> None:
         """
@@ -136,7 +192,12 @@ class Board:
         a human player or an AI
         """
         return {
-            "community_cards": self._community_cards
+            "community_cards": self._community_cards,
+            "big_blind": self.big_blind,
+            "little_blind": self.little_blind,
+            "players": [
+                player.public_info for player in self._active_players
+            ]
         }
 
     @property

@@ -93,13 +93,13 @@ def test_big_blind() -> None:
         deck=deck
     )
 
-    assert board.big_blind == 0
+    assert board.global_state["big_blind"] == 0
     board.hand()
-    assert board.big_blind == 1
+    assert board.global_state["big_blind"] == 1
     board.hand()
-    assert board.big_blind == 2
+    assert board.global_state["big_blind"] == 2
     board.hand()
-    assert board.big_blind == 0
+    assert board.global_state["big_blind"] == 0
     board.hand()
 
     
@@ -126,13 +126,13 @@ def test_little_blind() -> None:
         deck=deck
     )
 
-    assert board.little_blind == 1
+    assert board.global_state["little_blind"] == 1
     board.hand()
-    assert board.little_blind == 2
+    assert board.global_state["little_blind"] == 2
     board.hand()
-    assert board.little_blind == 0
+    assert board.global_state["little_blind"] == 0
     board.hand()
-    assert board.little_blind == 1
+    assert board.global_state["little_blind"] == 1
     board.hand()
 
 def test_big_blind_default() -> None:
@@ -431,3 +431,55 @@ def test_zero_bet_min_non_blind():
     bet, new_global = board.ask_player_for_bid(2, 0)
     assert bet == 0
     assert new_global == 0
+
+def test_player_public_info() -> None:
+    """
+    checks to make sure the players public bet is correct
+    """
+    player_one = MockPlayer(
+        start_money=10000,
+        commands=[
+            {
+                "command": "bet",
+                "bet": 50
+            },
+            {
+                "command": "bet",
+                "bet": 100
+            }
+        ],
+    )
+    player_two = MockPlayer(
+        start_money=10000,
+        commands=[
+            {
+                "command": "bet",
+                "bet": 100
+            }
+        ]   
+    )
+
+    players = [
+        player_one,
+        player_two
+    ]
+    deck = Deck()
+    board = Board(
+        players=players,
+        scoring_rules=[],
+        deck=deck
+    )
+
+    #assumption for the test
+    assert board.big_blind == 0
+
+    #test
+    board.round()
+    assert player_one.last_global_state["players"][1] == {
+        "bet": 100
+    }
+    assert player_one.last_global_state["players"][0] == {
+        "bet": 50
+    }
+
+    

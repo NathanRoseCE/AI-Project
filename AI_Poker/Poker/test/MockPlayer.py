@@ -23,11 +23,13 @@ class MockPlayer(Player):
         super().__init__(start_money)
         self._commands = commands
         self._current_command = 0
+        self.last_global_state = {}
 
-    def make_decision(self, bet_minimum: float, flobal_state: dict) -> float:
+    def make_decision(self, global_state: dict, bet_minimum: float) -> float:
         """
         makes the decisions as passed by command
         """
+        self.last_global_state = global_state
         bet = 0
         if self._current_command >= len(self._commands):
             raise ValueError(f"Not enough commands listed for MockPlayer, num={len(self._commands)}")
