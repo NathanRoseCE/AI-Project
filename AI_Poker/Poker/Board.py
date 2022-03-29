@@ -102,11 +102,13 @@ class Board:
         self._starting_player = 0
         self._big_blind_ammount = big_blind_ammount
         self._little_blind_ammount = little_blind_ammount
+        self._round = 0
 
     def hand(self) -> None:
         """
         plays one hand of poker, assume the deck is set up correctly
         """
+        self._round = 0
         self._deal_cards()
         self._end_hand()
 
@@ -115,6 +117,7 @@ class Board:
         Handles one betting round within a hand
         """
         self._ask_for_bets(self.big_blind)
+        self._round += 1
 
     def _deal_cards(self) -> None:
         """
@@ -134,6 +137,8 @@ class Board:
             player.hand = hands[i]
 
         #TODO create hidden cards
+        #burn a card
+        self._deck.next_card()
         self._community_cards = []
         for _ in range(5):
             self._community_cards.append(self._deck.next_card())
@@ -192,13 +197,26 @@ class Board:
         a human player or an AI
         """
         return {
-            "community_cards": self._community_cards,
+            "community_cards": self._global_state_community_cards,
             "big_blind": self.big_blind,
             "little_blind": self.little_blind,
             "players": [
                 player.public_info for player in self._active_players
             ]
         }
+
+    @property
+    def _global_state_community_cards(self) -> Iterable[Card]:
+        if self._round == 0:
+            return []
+        elif self._round == 1:
+            return self._community_cards[0:3]
+        elif self._round == 2:
+            return self._community_cards[0:4]
+        elif self._round == 3:
+            return self._community_cards[0:5]
+        else:
+            raise LogicError("Poker does not have 5 rounds of betting")
 
     @property
     def big_blind(self) -> int:

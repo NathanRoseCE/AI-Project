@@ -32,11 +32,11 @@ def test_deal_cards() -> None:
     assert cards[4] in players[1].hand 
     assert cards[5] in players[2].hand
     
-    assert cards[6] in board.global_state["community_cards"]
-    assert cards[7] in board.global_state["community_cards"]
-    assert cards[8] in board.global_state["community_cards"]
-    assert cards[9] in board.global_state["community_cards"]
-    assert cards[10] in board.global_state["community_cards"]
+    assert cards[7] in board._community_cards
+    assert cards[8] in board._community_cards
+    assert cards[9] in board._community_cards
+    assert cards[10] in board._community_cards
+    assert cards[11] in board._community_cards
 
 def test_starting_player() -> None:
     player_one = Player(
@@ -482,4 +482,149 @@ def test_player_public_info() -> None:
         "bet": 50
     }
 
+    
+def test_board_public_cards_after_initial_deal():
+    player_one = MockPlayer(
+        start_money=10000,
+        commands=[],
+    )
+    players = [
+        player_one
+    ]
+    deck = Deck()
+    board = Board(
+        players=players,
+        scoring_rules=[],
+        deck=deck
+    )
+    board._deal_cards()
+    # after dealing cards, no public community cards
+    assert len(board.global_state["community_cards"]) == 0
+    
+def test_board_public_cards_round_one():
+    player_one = MockPlayer(
+        start_money=10000,
+        commands=[
+            {
+                "command": "bet",
+                "bet": 50
+            },
+            {
+                "command": "bet",
+                "bet": 50
+            }
+        ],
+    )
+    players = [
+        player_one
+    ]
+    deck = Deck()
+    # two cards to player[0:2]
+    # one card burnt [2:3]
+    public_cards = [
+        deck._active_cards[3],
+        deck._active_cards[4],
+        deck._active_cards[5],
+        deck._active_cards[6],
+        deck._active_cards[7],
+    ]
+    board = Board(
+        players=players,
+        scoring_rules=[],
+        deck=deck
+    )
+    board._deal_cards()
+    board.round()
+    assert len(board.global_state["community_cards"]) == 3
+    assert public_cards[0] in board.global_state["community_cards"]
+    assert public_cards[1] in board.global_state["community_cards"]
+    assert public_cards[2] in board.global_state["community_cards"]
+    
+def test_board_public_cards_round_two():
+    player_one = MockPlayer(
+        start_money=10000,
+        commands=[
+            {
+                "command": "bet",
+                "bet": 50
+            },
+            {
+                "command": "bet",
+                "bet": 50
+            }
+        ],
+    )
+    players = [
+        player_one
+    ]
+    deck = Deck()
+    # two cards to player[0:2]
+    # one card burnt [2:3]
+    public_cards = [
+        deck._active_cards[3],
+        deck._active_cards[4],
+        deck._active_cards[5],
+        deck._active_cards[6],
+        deck._active_cards[7],
+    ]
+    board = Board(
+        players=players,
+        scoring_rules=[],
+        deck=deck
+    )
+    board._deal_cards()
+    board.round()
+    board.round()
+    assert len(board.global_state["community_cards"]) == 4
+    assert public_cards[0] in board.global_state["community_cards"]
+    assert public_cards[1] in board.global_state["community_cards"]
+    assert public_cards[2] in board.global_state["community_cards"]
+    assert public_cards[3] in board.global_state["community_cards"]
+    
+def test_board_public_cards_round_two():
+    player_one = MockPlayer(
+        start_money=10000,
+        commands=[
+            {
+                "command": "bet",
+                "bet": 50
+            },
+            {
+                "command": "bet",
+                "bet": 50
+            },
+            {
+                "command": "bet",
+                "bet": 50
+            }
+        ],
+    )
+    players = [
+        player_one
+    ]
+    deck = Deck()
+    # two cards to player[0:2]
+    # one card burnt [2:3]
+    public_cards = [
+        deck._active_cards[3],
+        deck._active_cards[4],
+        deck._active_cards[5],
+        deck._active_cards[6],
+        deck._active_cards[7],
+    ]
+    board = Board(
+        players=players,
+        scoring_rules=[],
+        deck=deck
+    )
+    board._deal_cards()
+    board.round()
+    board.round()
+    board.round()
+    assert len(board.global_state["community_cards"]) == 5
+    assert public_cards[0] in board.global_state["community_cards"]
+    assert public_cards[1] in board.global_state["community_cards"]
+    assert public_cards[2] in board.global_state["community_cards"]
+    assert public_cards[3] in board.global_state["community_cards"]
+    assert public_cards[4] in board.global_state["community_cards"]
     
