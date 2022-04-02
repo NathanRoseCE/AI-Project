@@ -2,24 +2,40 @@ from typing import Iterable, Tuple
 from AI_Poker.Poker.Card import Card
 from AI_Poker.Poker.Deck import Deck
 from AI_Poker.Poker.Player import Player
+from AI_Poker.Poker.HandValue import HandValue
 import numpy as np
 import logging
 
 
-class RuleScoring:
+class RuleScorer:
     """
-    This contains information for the rules of texas holdem
+    This class will take in the cards and determine the global winner
     """
-    def __init__(self, score:int=0) -> None:
-        self._score = score
+    def __init__(self) -> None:
+        pass
         
-    def score(self, cards: Iterable[Card]) -> int:
+    def score(self,
+              community_cards: Iterable[Card],
+              players: Iterable[Player]) -> int:
         """
         This is a simple method that returns the score if the 
         condition is met, and 0 if nothing is met
         """
-        return self._score
+        # a list that holds (player_index, score)
+        player_scores = []
+        evaluator = HandValue()
+        for i, player in enumerate(players):
+            cards = player.hand + community_cards
+            player_scores.append((i,evaluator.valueHand(cards)))
+        return self._choose_winner(player_scores)
 
+    def _choose_winner(self, player_scores: Iterable[Tuple[int]]) -> int:
+        sorted_players = sorted(
+            player_scores,
+            key=lambda x : x[1]
+        )
+        return sorted_players[0][0]
+    
 class PlayerWrapper:
     """
     This class is a simple wrapper to handle the player and 
@@ -64,9 +80,7 @@ class PlayerWrapper:
         """
         sets the hand for the player object
         """
-        self._player.hand = hand
-
-    
+        self._player.hand = hand    
 
 
 class Board:
@@ -76,7 +90,6 @@ class Board:
     MAX_PLAYERS=5
     def __init__(self,
                  players: Iterable[Player],
-                 scoring_rules: Iterable[RuleScoring],
                  deck: Deck,
                  big_blind_ammount=30,
                  little_blind_ammount=20
@@ -86,7 +99,6 @@ class Board:
         self._active_players = [
             PlayerWrapper(player) for player in players
         ]
-        self._rules = scoring_rules
         self._deck = deck
         self._community_cards = []
         self._starting_player = 0
@@ -248,8 +260,7 @@ class Board:
             bet_min = self.little_blind_ammount if self.little_blind_ammount > bet_min else bet_min
             
         global_state = self.global_state
-        global_state["bet_min"] = bet_min
-        
+        global_state["bet_min"] = bet_min        
         # todo allow for three attempts before assuming fold
         bet = self._active_players[player_index].decision(
             global_state

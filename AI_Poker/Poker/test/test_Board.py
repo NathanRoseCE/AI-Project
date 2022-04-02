@@ -1,26 +1,26 @@
 import pytest
 from copy import deepcopy
 from AI_Poker.Poker.Deck import Deck
-from AI_Poker.Poker.Board import Board, Player, RuleScoring
-from .MockPlayer import MockPlayer
+from AI_Poker.Poker.Board import Board, RuleScorer
+from AI_Poker.Poker.Card import Card, CardValue, CardSuit
+from .MockPlayer import MockPlayer, MinPlayer
 
 
 def test_deal_cards() -> None:
     players = [
-        Player(
+        MinPlayer(
             name="test", money=10000
         ),
-        Player(
+        MinPlayer(
             name="test", money=10000
         ),
-        Player(
+        MinPlayer(
             name="test", money=10000
         )
     ]
     deck = Deck()
     board = Board(
-        players=players,
-        scoring_rules=[],
+        players=players,        
         deck=deck
     )
     cards = deepcopy(deck._active_cards)
@@ -39,13 +39,13 @@ def test_deal_cards() -> None:
     assert cards[11] in board._community_cards
 
 def test_starting_player() -> None:
-    player_one = Player(
+    player_one = MinPlayer(
         name="test", money=10000
     )
-    player_two = Player(
+    player_two = MinPlayer(
         name="test", money=10000
     )
-    player_three = Player(
+    player_three = MinPlayer(
         name="test", money=10000
     )
     players = [
@@ -56,7 +56,6 @@ def test_starting_player() -> None:
     deck = Deck()
     board = Board(
         players=players,
-        scoring_rules=[],
         deck=deck
     )
 
@@ -72,13 +71,13 @@ def test_starting_player() -> None:
     
 
 def test_big_blind() -> None:
-    player_one = Player(
+    player_one = MinPlayer(
         name="test", money=10000
     )
-    player_two = Player(
+    player_two = MinPlayer(
         name="test", money=10000
     )
-    player_three = Player(
+    player_three = MinPlayer(
         name="test", money=10000
     )
     players = [
@@ -89,7 +88,6 @@ def test_big_blind() -> None:
     deck = Deck()
     board = Board(
         players=players,
-        scoring_rules=[],
         deck=deck
     )
 
@@ -105,13 +103,13 @@ def test_big_blind() -> None:
     
 
 def test_little_blind() -> None:
-    player_one = Player(
+    player_one = MinPlayer(
         name="test", money=10000
     )
-    player_two = Player(
+    player_two = MinPlayer(
         name="test", money=10000
     )
-    player_three = Player(
+    player_three = MinPlayer(
         name="test", money=10000
     )
     players = [
@@ -122,7 +120,6 @@ def test_little_blind() -> None:
     deck = Deck()
     board = Board(
         players=players,
-        scoring_rules=[],
         deck=deck
     )
 
@@ -136,13 +133,13 @@ def test_little_blind() -> None:
     board.hand()
 
 def test_big_blind_default() -> None:
-    player_one = Player(
+    player_one = MinPlayer(
         name="test", money=10000
     )
-    player_two = Player(
+    player_two = MinPlayer(
         name="test", money=10000
     )
-    player_three = Player(
+    player_three = MinPlayer(
         name="test", money=10000
     )
     players = [
@@ -153,20 +150,19 @@ def test_big_blind_default() -> None:
     deck = Deck()
     board = Board(
         players=players,
-        scoring_rules=[],
         deck=deck
     )
     assert board.big_blind_ammount == 30
     
 
 def test_little_blind_default() -> None:
-    player_one = Player(
+    player_one = MinPlayer(
         name="test", money=10000
     )
-    player_two = Player(
+    player_two = MinPlayer(
         name="test", money=10000
     )
-    player_three = Player(
+    player_three = MinPlayer(
         name="test", money=10000
     )
     players = [
@@ -177,7 +173,6 @@ def test_little_blind_default() -> None:
     deck = Deck()
     board = Board(
         players=players,
-        scoring_rules=[],
         deck=deck
     )
     assert board.little_blind_ammount == 20
@@ -201,7 +196,6 @@ def test_ask_player_for_big_blind_bet_min() -> None:
     deck = Deck()
     board = Board(
         players=players,
-        scoring_rules=[],
         deck=deck
     )
 
@@ -234,7 +228,6 @@ def test_ask_player_for_big_blind_bet_above() -> None:
     deck = Deck()
     board = Board(
         players=players,
-        scoring_rules=[],
         deck=deck
     )
 
@@ -252,7 +245,7 @@ def test_ask_player_for_little_blind_bet_min() -> None:
     """
     tests on the ask_player_for_bid function
     """
-    player_one = Player(
+    player_one = MinPlayer(
         name="test", money=10000,
     )
     player_two = MockPlayer(
@@ -271,7 +264,6 @@ def test_ask_player_for_little_blind_bet_min() -> None:
     deck = Deck()
     board = Board(
         players=players,
-        scoring_rules=[],
         deck=deck
     )
 
@@ -288,7 +280,7 @@ def test_ask_player_for_little_blind_bet_above() -> None:
     """
     tests on the ask_player_for_bid function
     """
-    player_one = Player(
+    player_one = MinPlayer(
         name="test", money=10000,
     )
     player_two = MockPlayer(
@@ -307,7 +299,6 @@ def test_ask_player_for_little_blind_bet_above() -> None:
     deck = Deck()
     board = Board(
         players=players,
-        scoring_rules=[],
         deck=deck
     )
 
@@ -321,10 +312,10 @@ def test_ask_player_for_little_blind_bet_above() -> None:
     assert new_global == 40
 
 def test_non_blind_player_pass():
-    player_one = Player(
+    player_one = MinPlayer(
         name="test", money=10000,
     )
-    player_two = Player(
+    player_two = MinPlayer(
         name="test", money=10000,
     )
     player_three = MockPlayer(
@@ -343,7 +334,6 @@ def test_non_blind_player_pass():
     deck = Deck()
     board = Board(
         players=players,
-        scoring_rules=[],
         deck=deck
     )
 
@@ -357,10 +347,10 @@ def test_non_blind_player_pass():
     assert new_global == 0
 
 def test_non_blind_player_underbid():
-    player_one = Player(
+    player_one = MinPlayer(
         name="test", money=10000,
     )
-    player_two = Player(
+    player_two = MinPlayer(
         name="test", money=10000,
     )
     player_three = MockPlayer(
@@ -379,7 +369,6 @@ def test_non_blind_player_underbid():
     deck = Deck()
     board = Board(
         players=players,
-        scoring_rules=[],
         deck=deck
     )
 
@@ -397,10 +386,10 @@ def test_non_blind_player_underbid():
     assert success
 
 def test_zero_bet_min_non_blind():
-    player_one = Player(
+    player_one = MinPlayer(
         name="test", money=10000,
     )
-    player_two = Player(
+    player_two = MinPlayer(
         name="test", money=10000,
     )
     player_three = MockPlayer(
@@ -419,7 +408,6 @@ def test_zero_bet_min_non_blind():
     deck = Deck()
     board = Board(
         players=players,
-        scoring_rules=[],
         deck=deck
     )
 
@@ -466,7 +454,6 @@ def test_player_public_info() -> None:
     deck = Deck()
     board = Board(
         players=players,
-        scoring_rules=[],
         deck=deck
     )
 
@@ -494,7 +481,6 @@ def test_board_public_cards_after_initial_deal():
     deck = Deck()
     board = Board(
         players=players,
-        scoring_rules=[],
         deck=deck
     )
     board._deal_cards()
@@ -530,7 +516,6 @@ def test_board_public_cards_round_one():
     ]
     board = Board(
         players=players,
-        scoring_rules=[],
         deck=deck
     )
     board._deal_cards()
@@ -569,7 +554,6 @@ def test_board_public_cards_round_two():
     ]
     board = Board(
         players=players,
-        scoring_rules=[],
         deck=deck
     )
     board._deal_cards()
@@ -614,7 +598,6 @@ def test_board_public_cards_round_two():
     ]
     board = Board(
         players=players,
-        scoring_rules=[],
         deck=deck
     )
     board._deal_cards()
@@ -627,4 +610,39 @@ def test_board_public_cards_round_two():
     assert public_cards[2] in board.global_state["community_cards"]
     assert public_cards[3] in board.global_state["community_cards"]
     assert public_cards[4] in board.global_state["community_cards"]
+    
+def test_rule_scorer():
+    community_cards = [
+        Card(CardSuit.Spade, CardValue.Two), 
+        Card(CardSuit.Club, CardValue.Five), 
+        Card(CardSuit.Heart, CardValue.Six), 
+        Card(CardSuit.Diamond, CardValue.King), 
+    ]
+    player_one = MinPlayer(name="test", money=0)
+    player_one.setCard(
+        Card(CardSuit.Spade, CardValue.Ace), 
+    )
+    player_one.setCard(
+        Card(CardSuit.Heart, CardValue.King), 
+    )
+    player_two = MinPlayer(name="test", money=0)
+    player_two.setCard(
+        Card(CardSuit.Spade, CardValue.Three), 
+    )
+    player_two.setCard(
+        Card(CardSuit.Spade, CardValue.Four), 
+    )
+    player_three = MinPlayer(name="test", money=0)
+    player_three.setCard(
+        Card(CardSuit.Spade, CardValue.Jack), 
+    )
+    player_three.setCard(
+        Card(CardSuit.Heart, CardValue.Ten), 
+    )
+    scorer = RuleScorer()
+    winner = scorer.score(
+        community_cards,
+        [player_one, player_two, player_three]
+    )
+    assert winner == 1 #player_two
     

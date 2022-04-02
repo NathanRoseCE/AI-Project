@@ -1,7 +1,6 @@
 from typing import Iterable
 from AI_Poker.Poker.Player import Player
 
-#TODO update this player to inherit from the true player interface
 class MockPlayer(Player):
     """
     This is a mock player that will follow pre-programmed commands
@@ -42,3 +41,14 @@ class MockPlayer(Player):
             bet = self._commands[self._current_command]["bet"]
         self._current_command += 1
         return bet
+
+    
+class MinPlayer(Player):
+    """
+    A player that always bets the minimum, useful for testing
+    """
+    def __init__(self, name: str, money: float) -> None:
+        super().__init__(name, money)
+
+    def decision(self, global_state: dict) -> float:
+        return global_state["bet_min"]

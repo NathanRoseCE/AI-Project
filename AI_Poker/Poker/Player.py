@@ -112,7 +112,4 @@ class Player:
         """
         Handles player decision logic, what they can and cant do based on board state
         """
-        pass
-
-
-
+        raise NotImplementedError

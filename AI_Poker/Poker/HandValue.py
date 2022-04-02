@@ -10,7 +10,7 @@ class HandValue:
         self.cards = []
         self.cardValues = dict()
         self.suits = []
-        for suit in range(4):
+        for suit in CardSuit:
             self.suits.append(CardSuit(suit))
         self.cardSuits  = dict()
 
@@ -111,26 +111,26 @@ class HandValue:
         self.evalCardValues()
 
         if (self.isRoyalFlush()):
-            print(10)
+            return 10
         elif (self.isStraightFlush()):
-            print(9)
+            return 9
         elif (self.isQuads()):
-            print(8)
+            return 8
         elif (self.isFullHouse()):
-            print(7)
+            return 7
         elif (self.isFlush()):
-            print(6)
+            return 6
         elif (self.isStraight()):
-            print(5)
+            return 5
         elif (self.isTrips()):
-            print(4)
+            return 4
         elif (self.isTwoPair()):
-            print(3)
+            return 3
         elif (self.isPair()):
-            print(2)
+            return 2
         elif (self.isHighCard()):
-            print(1)
+            return 1
 
-    def valueHand(self, cards):
+    def valueHand(self, cards) -> int:
         self.cards = cards
-        self.determineHandValue()
+        return self.determineHandValue()
