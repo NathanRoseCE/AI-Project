@@ -1,12 +1,12 @@
 from typing import Iterable
-from ..Board import Player
+from AI_Poker.Poker.Player import Player
 
 #TODO update this player to inherit from the true player interface
 class MockPlayer(Player):
     """
     This is a mock player that will follow pre-programmed commands
     """
-    def __init__(self, start_money: float, commands = Iterable[dict]) -> None:
+    def __init__(self, name: str, money: float, commands = Iterable[dict]) -> None:
         """
         command_options:
         {
@@ -20,16 +20,17 @@ class MockPlayer(Player):
           "bet": $BET_AMMOUNT
         } - results in a bet of $BET_AMMOUNT, $BET_AMMOUNT should be float castable
         """
-        super().__init__(start_money)
+        super().__init__(name, money)
         self._commands = commands
         self._current_command = 0
         self.last_global_state = {}
 
-    def make_decision(self, global_state: dict, bet_minimum: float) -> float:
+    def decision(self, global_state: dict) -> float:
         """
         makes the decisions as passed by command
         """
         self.last_global_state = global_state
+        bet_minimum = global_state["bet_min"]
         bet = 0
         if self._current_command >= len(self._commands):
             raise ValueError(f"Not enough commands listed for MockPlayer, num={len(self._commands)}")

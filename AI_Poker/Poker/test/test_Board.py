@@ -8,13 +8,13 @@ from .MockPlayer import MockPlayer
 def test_deal_cards() -> None:
     players = [
         Player(
-            start_money=10000
+            name="test", money=10000
         ),
         Player(
-            start_money=10000
+            name="test", money=10000
         ),
         Player(
-            start_money=10000
+            name="test", money=10000
         )
     ]
     deck = Deck()
@@ -40,13 +40,13 @@ def test_deal_cards() -> None:
 
 def test_starting_player() -> None:
     player_one = Player(
-        start_money=10000
+        name="test", money=10000
     )
     player_two = Player(
-        start_money=10000
+        name="test", money=10000
     )
     player_three = Player(
-        start_money=10000
+        name="test", money=10000
     )
     players = [
         player_one,
@@ -73,13 +73,13 @@ def test_starting_player() -> None:
 
 def test_big_blind() -> None:
     player_one = Player(
-        start_money=10000
+        name="test", money=10000
     )
     player_two = Player(
-        start_money=10000
+        name="test", money=10000
     )
     player_three = Player(
-        start_money=10000
+        name="test", money=10000
     )
     players = [
         player_one,
@@ -106,13 +106,13 @@ def test_big_blind() -> None:
 
 def test_little_blind() -> None:
     player_one = Player(
-        start_money=10000
+        name="test", money=10000
     )
     player_two = Player(
-        start_money=10000
+        name="test", money=10000
     )
     player_three = Player(
-        start_money=10000
+        name="test", money=10000
     )
     players = [
         player_one,
@@ -137,13 +137,13 @@ def test_little_blind() -> None:
 
 def test_big_blind_default() -> None:
     player_one = Player(
-        start_money=10000
+        name="test", money=10000
     )
     player_two = Player(
-        start_money=10000
+        name="test", money=10000
     )
     player_three = Player(
-        start_money=10000
+        name="test", money=10000
     )
     players = [
         player_one,
@@ -161,13 +161,13 @@ def test_big_blind_default() -> None:
 
 def test_little_blind_default() -> None:
     player_one = Player(
-        start_money=10000
+        name="test", money=10000
     )
     player_two = Player(
-        start_money=10000
+        name="test", money=10000
     )
     player_three = Player(
-        start_money=10000
+        name="test", money=10000
     )
     players = [
         player_one,
@@ -187,7 +187,7 @@ def test_ask_player_for_big_blind_bet_min() -> None:
     tests on the ask_player_for_bid function
     """
     player_one = MockPlayer(
-        start_money=10000,
+        name="test", money=10000,
         commands=[
             {
                 "command": "bet",
@@ -220,7 +220,7 @@ def test_ask_player_for_big_blind_bet_above() -> None:
     tests on the ask_player_for_bid function
     """
     player_one = MockPlayer(
-        start_money=10000,
+        name="test", money=10000,
         commands=[
             {
                 "command": "bet",
@@ -253,10 +253,10 @@ def test_ask_player_for_little_blind_bet_min() -> None:
     tests on the ask_player_for_bid function
     """
     player_one = Player(
-        start_money=10000,
+        name="test", money=10000,
     )
     player_two = MockPlayer(
-        start_money=10000,
+        name="test", money=10000,
         commands=[
             {
                 "command": "bet",
@@ -289,10 +289,10 @@ def test_ask_player_for_little_blind_bet_above() -> None:
     tests on the ask_player_for_bid function
     """
     player_one = Player(
-        start_money=10000,
+        name="test", money=10000,
     )
     player_two = MockPlayer(
-        start_money=10000,
+        name="test", money=10000,
         commands=[
             {
                 "command": "bet",
@@ -322,13 +322,13 @@ def test_ask_player_for_little_blind_bet_above() -> None:
 
 def test_non_blind_player_pass():
     player_one = Player(
-        start_money=10000,
+        name="test", money=10000,
     )
     player_two = Player(
-        start_money=10000,
+        name="test", money=10000,
     )
     player_three = MockPlayer(
-        start_money=10000,
+        name="test", money=10000,
         commands=[
             {
                 "command": "pass"
@@ -358,13 +358,13 @@ def test_non_blind_player_pass():
 
 def test_non_blind_player_underbid():
     player_one = Player(
-        start_money=10000,
+        name="test", money=10000,
     )
     player_two = Player(
-        start_money=10000,
+        name="test", money=10000,
     )
     player_three = MockPlayer(
-        start_money=10000,
+        name="test", money=10000,
         commands=[
             {
                 "command": "pass"
@@ -398,13 +398,13 @@ def test_non_blind_player_underbid():
 
 def test_zero_bet_min_non_blind():
     player_one = Player(
-        start_money=10000,
+        name="test", money=10000,
     )
     player_two = Player(
-        start_money=10000,
+        name="test", money=10000,
     )
     player_three = MockPlayer(
-        start_money=10000,
+        name="test", money=10000,
         commands=[
             {
                 "command": "pass"
@@ -437,7 +437,7 @@ def test_player_public_info() -> None:
     checks to make sure the players public bet is correct
     """
     player_one = MockPlayer(
-        start_money=10000,
+        name="test", money=10000,
         commands=[
             {
                 "command": "bet",
@@ -450,7 +450,7 @@ def test_player_public_info() -> None:
         ],
     )
     player_two = MockPlayer(
-        start_money=10000,
+        name="test", money=10000,
         commands=[
             {
                 "command": "bet",
@@ -485,7 +485,7 @@ def test_player_public_info() -> None:
     
 def test_board_public_cards_after_initial_deal():
     player_one = MockPlayer(
-        start_money=10000,
+        name="test", money=10000,
         commands=[],
     )
     players = [
@@ -503,7 +503,7 @@ def test_board_public_cards_after_initial_deal():
     
 def test_board_public_cards_round_one():
     player_one = MockPlayer(
-        start_money=10000,
+        name="test", money=10000,
         commands=[
             {
                 "command": "bet",
@@ -542,7 +542,7 @@ def test_board_public_cards_round_one():
     
 def test_board_public_cards_round_two():
     player_one = MockPlayer(
-        start_money=10000,
+        name="test", money=10000,
         commands=[
             {
                 "command": "bet",
@@ -583,7 +583,7 @@ def test_board_public_cards_round_two():
     
 def test_board_public_cards_round_two():
     player_one = MockPlayer(
-        start_money=10000,
+        name="test", money=10000,
         commands=[
             {
                 "command": "bet",

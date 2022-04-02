@@ -1,20 +1,10 @@
 from typing import Iterable, Tuple
 from AI_Poker.Poker.Card import Card
 from AI_Poker.Poker.Deck import Deck
+from AI_Poker.Poker.Player import Player
 import numpy as np
 import logging
 
-#TODO remove these with the actual object
-class Player:
-    def __init__(self, start_money: float) -> None:
-        self.money = start_money
-        self.hand = []
-
-    def make_decision(self, bet_minimum: float, global_state: dict) -> float:
-        """
-        returns the bet the player would like to make
-        """
-        return bet_minimum
 
 class RuleScoring:
     """
@@ -48,11 +38,11 @@ class PlayerWrapper:
             "bet": self._bet_ammount
         }
 
-    def make_decision(self, *args, **dargs):
+    def decision(self, *args, **dargs):
         """
         returns the bet the player would like to make
         """
-        self._bet_ammount = self._player.make_decision(*args, **dargs)
+        self._bet_ammount = self._player.decision(*args, **dargs)
         return self._bet_ammount
 
     def close_hand(self, money_won: float=0) -> None:
@@ -255,10 +245,16 @@ class Board:
         if player_index == self.big_blind:
             bet_min = self.big_blind_ammount if self.big_blind_ammount > bet_min else bet_min
         if player_index == self.little_blind:
-            bet_min = self.little_blind_ammount if self.little_blind_ammount > bet_min else bet_min    
-        bet = self._active_players[player_index].make_decision(
-            self.global_state, bet_min
+            bet_min = self.little_blind_ammount if self.little_blind_ammount > bet_min else bet_min
+            
+        global_state = self.global_state
+        global_state["bet_min"] = bet_min
+        
+        # todo allow for three attempts before assuming fold
+        bet = self._active_players[player_index].decision(
+            global_state
         )
+        
         assert bet >= bet_min
         new_global_min = bet
         if (player_index == self.big_blind) and (bet == self.big_blind_ammount):
