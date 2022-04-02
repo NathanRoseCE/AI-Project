@@ -32,7 +32,7 @@ class RuleScorer:
     def _choose_winner(self, player_scores: Iterable[Tuple[int]]) -> int:
         sorted_players = sorted(
             player_scores,
-            key=lambda x : x[1]
+            key=lambda x : -x[1]
         )
         return sorted_players[0][0]
     
