@@ -1,4 +1,4 @@
-from selectors import EpollSelector
+# from selectors import EpollSelector
 from AI_Poker.Poker.Card import Card, CardSuit, CardValue
 
 class HandValue:
@@ -22,6 +22,9 @@ class HandValue:
             self.cardValues[card.value]+=1
             self.cardSuits[card.suit]+=1
             # print()
+
+        print(self.cardValues)
+        print(self.cardSuits)
         
     def isRoyalFlush(self):
         print("Royal Flush")
@@ -47,8 +50,7 @@ class HandValue:
         for card in self.cardValues:
             if (self.cardValues[card]==4):
                 return True
-            else:
-                return False
+        return False
 
     def isFullHouse(self):
         print("Full House")
@@ -62,14 +64,13 @@ class HandValue:
         for suit in self.cardSuits:
             if(self.cardSuits[suit]==5):
                 return True
-            else:
-                return False
+        return False
 
     def isStraight(self):
         print("Straight")
         for i in range(2, 14):
             if (self.cardValues[i]==1):
-                for j in range(i+1, i+4):
+                for j in range(i+1, i+5):
                     if (self.cardValues[j]!=1):
                         return False
                 return True
@@ -79,8 +80,7 @@ class HandValue:
         for card in self.cardValues:
             if (self.cardValues[card]==3):
                 return True
-            else:
-                return False
+        return False
 
     def isTwoPair(self):
         print("Two Pair")
@@ -95,15 +95,14 @@ class HandValue:
         for card in self.cardValues:
             if (self.cardValues[card]==2):
                 return True
-            else:
-                return False
+        return False
 
     def isHighCard(self):
         print("High Card")
         maxValue = 0
         for card in self.cardValues:
-            if (self.cardValues[card]==1 and self.cardValues[card]>maxValue):
-                maxValue=self.cardValues[card]
+            if (self.cardValues[card]==1 and card>maxValue):
+                maxValue=card
         print("Highest Card is: ", maxValue)
         return True
 
