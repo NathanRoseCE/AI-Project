@@ -36,7 +36,7 @@ class MockPlayer(Player):
         if self._commands[self._current_command]["command"] == "pass":
             pass
         elif self._commands[self._current_command]["command"] == "fold":
-            raise NotImplimentedError()
+             return -1
         elif self._commands[self._current_command]["command"] == "bet":
             bet = self._commands[self._current_command]["bet"]
         self._current_command += 1

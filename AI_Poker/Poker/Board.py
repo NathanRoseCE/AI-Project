@@ -44,6 +44,7 @@ class PlayerWrapper:
     def __init__(self, player: Player) -> None:
         self._player = player
         self._bet_ammount = 0
+        self._folded = False
 
     @property
     def public_info(self) -> dict:
@@ -51,6 +52,7 @@ class PlayerWrapper:
         Gets the public information about the player
         """
         return {
+            "folded": self._folded,
             "bet": self._bet_ammount
         }
 
@@ -67,6 +69,7 @@ class PlayerWrapper:
         """
         self._player.money += money_won
         self._bet_ammount = 0
+        self._folded = False
 
     @property
     def hand(self) -> Iterable[Card]:
@@ -80,7 +83,21 @@ class PlayerWrapper:
         """
         sets the hand for the player object
         """
-        self._player.hand = hand    
+        self._player.hand = hand
+
+    @property
+    def folded(self) -> bool:
+        """
+        gets whether the player folded
+        """
+        return self._folded
+
+    @folded.setter
+    def folded(self, folded: bool) -> None:
+        """
+        sets the player as folded
+        """
+        self._folded = bool(folded)
 
 
 class Board:
@@ -149,17 +166,23 @@ class Board:
         """
         Ask all of the players for thier bets
         """
-        ask_player = starting_player
+        ask_player_ind = starting_player
         bet_min = 0
-        highest_bet_index=-1
+        highest_bet_index = -1
         while True:
-            if highest_bet_index == ask_player:
+            ask_player = self._active_players[ask_player_ind]
+            if highest_bet_index == ask_player_ind:
                 break
-            bet, new_bet_min = self.ask_player_for_bid(ask_player, bet_min)
-            if new_bet_min > bet_min:
-                bet_min = new_bet_min
-                highest_bet_index = ask_player
-            ask_player = self._next_player_from(ask_player)
+            if highest_bet_index == -1:
+                highest_bet_index = ask_player_ind
+            if not ask_player.folded:
+                bet, new_bet_min = self.ask_player_for_bid(ask_player_ind, bet_min)
+                if bet < bet_min:
+                    ask_player.folded = True
+                if new_bet_min > bet_min:
+                    bet_min = new_bet_min
+                    highest_bet_index = ask_player_ind
+            ask_player_ind = self._next_player_from(ask_player_ind)
 
     @property
     def starting_player(self) -> int:
@@ -265,11 +288,12 @@ class Board:
         bet = self._active_players[player_index].decision(
             global_state
         )
-        
-        assert bet >= bet_min
-        new_global_min = bet
-        if (player_index == self.big_blind) and (bet == self.big_blind_ammount):
-            new_global_min = global_min
-        if (player_index == self.little_blind) and (bet == self.little_blind_ammount):
-            new_global_min = global_min
+
+        new_global_min = global_min
+        if bet >= bet_min:
+            new_global_min = bet
+            if (player_index == self.big_blind) and (bet == self.big_blind_ammount):
+                new_global_min = global_min
+            if (player_index == self.little_blind) and (bet == self.little_blind_ammount):
+                new_global_min = global_min
         return bet, new_global_min

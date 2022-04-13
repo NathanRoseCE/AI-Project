@@ -28,8 +28,6 @@ class Player:
         """
         self.hand.append(card)
 
-
-
     def getHand(self):
         """
         Returns players hand 

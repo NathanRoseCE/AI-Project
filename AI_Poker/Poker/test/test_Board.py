@@ -357,7 +357,7 @@ def test_non_blind_player_underbid():
         name="test", money=10000,
         commands=[
             {
-                "command": "pass"
+                "command": "fold"
             }
         ]   
     )
@@ -379,11 +379,12 @@ def test_non_blind_player_underbid():
     #test
     success = True
     try:
-        bet, new_global = board.ask_player_for_bid(2, 100)
+        board._ask_for_bets(0)
         success = False
     except AssertionError:
         pass
-    assert success
+    print([player for player in board.global_state["players"]])
+    assert len([player for player in board.global_state["players"] if player["folded"]]) == 1
 
 def test_zero_bet_min_non_blind():
     player_one = MinPlayer(
@@ -462,11 +463,14 @@ def test_player_public_info() -> None:
 
     #test
     board.round()
+    print(player_one.last_global_state)
     assert player_one.last_global_state["players"][1] == {
-        "bet": 100
+        "bet": 100,
+        "folded": False
     }
     assert player_one.last_global_state["players"][0] == {
-        "bet": 50
+        "bet": 50,
+        "folded": False
     }
 
     
