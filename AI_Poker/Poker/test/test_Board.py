@@ -1,4 +1,5 @@
 import pytest
+import functools
 from copy import deepcopy
 from AI_Poker.Poker.Deck import Deck
 from AI_Poker.Poker.Board import Board, RuleScorer
@@ -621,6 +622,7 @@ def test_rule_scorer():
         Card(CardSuit.Club, CardValue.Five), 
         Card(CardSuit.Heart, CardValue.Six), 
         Card(CardSuit.Diamond, CardValue.King), 
+        Card(CardSuit.Diamond, CardValue.Queen), 
     ]
     player_one = MinPlayer(name="test", money=0)
     player_one.setCard(
@@ -649,4 +651,35 @@ def test_rule_scorer():
         [player_one, player_two, player_three]
     )
     assert winner == 1 #player_two
+    
+def test_simple_hand():
+    """
+    just a simple can we get thorugh a simple hand?
+    """
+    player_one = MinPlayer(
+        name="test", money=10000,
+    )
+    player_two = MinPlayer(
+        name="test", money=10000,
+    )
+    player_three = MinPlayer(
+        name="test", money=10000
+    )
+    players = [
+        player_one,
+        player_two,
+        player_three
+    ]
+    deck = Deck()
+    board = Board(
+        players=players,        
+        deck=deck
+    )
+    board.hand()
+    
+    # no money has vanished or appeared
+    assert functools.reduce(lambda a, b: a+b, [player.money for player in players]) == 30000
+
+    # assert that money has changed hands
+    assert False in [10000 == player.money for player in players]
     

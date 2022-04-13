@@ -40,10 +40,17 @@ class MockPlayer(Player):
         elif self._commands[self._current_command]["command"] == "bet":
             bet = self._commands[self._current_command]["bet"]
         self._current_command += 1
-        return bet
+        return self.submit_bet(bet)
+
+    def submit_bet(self, bet_ammount: float) -> float:
+        """
+        subtracts the bet ammount from the money then returns the ammount
+        """
+        self.money -= bet_ammount
+        return bet_ammount
 
     
-class MinPlayer(Player):
+class MinPlayer(MockPlayer):
     """
     A player that always bets the minimum, useful for testing
     """
@@ -51,4 +58,4 @@ class MinPlayer(Player):
         super().__init__(name, money)
 
     def decision(self, global_state: dict) -> float:
-        return global_state["bet_min"]
+        return self.submit_bet(global_state["bet_min"])

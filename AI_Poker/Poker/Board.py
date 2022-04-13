@@ -122,6 +122,8 @@ class Board:
         self._big_blind_ammount = big_blind_ammount
         self._little_blind_ammount = little_blind_ammount
         self._round = 0
+        self._scorer = RuleScorer()
+        self._pot = 0
 
     def hand(self) -> None:
         """
@@ -129,7 +131,12 @@ class Board:
         """
         self._round = 0
         self._deal_cards()
+        self.round()
+        self.round()
+        self.round()
+        self.round()
         self._end_hand()
+        self._round = 0
 
     def round(self) -> None:
         """
@@ -182,6 +189,7 @@ class Board:
                 if new_bet_min > bet_min:
                     bet_min = new_bet_min
                     highest_bet_index = ask_player_ind
+                self._pot += bet
             ask_player_ind = self._next_player_from(ask_player_ind)
 
     @property
@@ -206,6 +214,14 @@ class Board:
         This function is used for any logic that is used at the end of a hand
         """
         self._starting_player = self._next_player_from(self.starting_player)
+        winner = self._scorer.score(self._community_cards,
+                                    self._active_players)
+        for ind, player in enumerate(self._active_players):
+            if ind == winner:
+                player.close_hand(self._pot)
+            else:
+                player.close_hand(0)
+        self._pot = 0
         
 
     def is_game_over(self) -> bool:
