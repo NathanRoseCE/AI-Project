@@ -24,7 +24,7 @@ class CardValue(IntEnum):
     Ace = 14
     
 
-class CardSuit(Enum):
+class CardSuit(IntEnum):
     """
     handler for the different suits
     """
