@@ -213,16 +213,12 @@ class Board:
         """
         This function is used for any logic that is used at the end of a hand
         """
+        winner = self._scorer.score(self._community_cards, self._active_players)
+        winnings = [0 for _ in self._active_players]
+        winnings[winner] = self._pot
+        for player, winning in zip(self._active_players, winnings):
+            player.close_hand(winning)
         self._starting_player = self._next_player_from(self.starting_player)
-        winner = self._scorer.score(self._community_cards,
-                                    self._active_players)
-        for ind, player in enumerate(self._active_players):
-            if ind == winner:
-                player.close_hand(self._pot)
-            else:
-                player.close_hand(0)
-        self._pot = 0
-        
 
     def is_game_over(self) -> bool:
         """
@@ -241,6 +237,7 @@ class Board:
             "community_cards": self._global_state_community_cards,
             "big_blind": self.big_blind,
             "little_blind": self.little_blind,
+            "pot": self._pot,
             "players": [
                 player.public_info for player in self._active_players
             ]
@@ -304,7 +301,6 @@ class Board:
         bet = self._active_players[player_index].decision(
             global_state
         )
-
         new_global_min = global_min
         if bet >= bet_min:
             new_global_min = bet
