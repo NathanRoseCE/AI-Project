@@ -78,16 +78,76 @@ def test_straight() -> None:
     assert handValue == 5
 
 def test_flush() -> None:
-    hand = [    Card(CardSuit.Club, CardValue.Three), 
+    hand = [    Card(CardSuit.Club, CardValue.Eight), 
                 Card(CardSuit.Club, CardValue.Five)
             ]
-    community_cards = [ Card(CardSuit.Spade, CardValue.Two), 
+    community_cards = [ Card(CardSuit.Spade, CardValue.Seven), 
                         Card(CardSuit.Club, CardValue.Ten), 
                         Card(CardSuit.Heart, CardValue.Six), 
                         Card(CardSuit.Club, CardValue.King),
-                        Card(CardSuit.Club, CardValue.Four)
+                        Card(CardSuit.Club, CardValue.Queen)
                     ]
     cards = hand + community_cards
     scorer = HandValue()
     handValue = scorer.valueHand(cards)
     assert handValue == 6
+
+def test_full_house() -> None:
+    hand = [    Card(CardSuit.Club, CardValue.Three), 
+                Card(CardSuit.Diamond, CardValue.Three)
+            ]
+    community_cards = [ Card(CardSuit.Spade, CardValue.Two), 
+                        Card(CardSuit.Club, CardValue.Ten), 
+                        Card(CardSuit.Heart, CardValue.Ten), 
+                        Card(CardSuit.Diamond, CardValue.Ten),
+                        Card(CardSuit.Club, CardValue.Four)
+                    ]
+    cards = hand + community_cards
+    scorer = HandValue()
+    handValue = scorer.valueHand(cards)
+    assert handValue == 7
+
+def test_quads() -> None:
+    hand = [    Card(CardSuit.Spade, CardValue.Ten), 
+                Card(CardSuit.Diamond, CardValue.Three)
+            ]
+    community_cards = [ Card(CardSuit.Spade, CardValue.Two), 
+                        Card(CardSuit.Club, CardValue.Ten), 
+                        Card(CardSuit.Heart, CardValue.Ten), 
+                        Card(CardSuit.Diamond, CardValue.Ten),
+                        Card(CardSuit.Club, CardValue.Four)
+                    ]
+    cards = hand + community_cards
+    scorer = HandValue()
+    handValue = scorer.valueHand(cards)
+    assert handValue == 8
+
+def test_straight_flush() -> None:
+    hand = [    Card(CardSuit.Diamond, CardValue.Five), 
+                Card(CardSuit.Diamond, CardValue.Three)
+            ]
+    community_cards = [ Card(CardSuit.Diamond, CardValue.Two), 
+                        Card(CardSuit.Diamond, CardValue.Four), 
+                        Card(CardSuit.Heart, CardValue.Ten), 
+                        Card(CardSuit.Diamond, CardValue.Six),
+                        Card(CardSuit.Club, CardValue.Four)
+                    ]
+    cards = hand + community_cards
+    scorer = HandValue()
+    handValue = scorer.valueHand(cards)
+    assert handValue == 9
+
+def test_royal_flush() -> None:
+    hand = [    Card(CardSuit.Spade, CardValue.Ten), 
+                Card(CardSuit.Spade, CardValue.Jack)
+            ]
+    community_cards = [ Card(CardSuit.Spade, CardValue.Queen), 
+                        Card(CardSuit.Spade, CardValue.King), 
+                        Card(CardSuit.Heart, CardValue.Two), 
+                        Card(CardSuit.Spade, CardValue.Ace),
+                        Card(CardSuit.Club, CardValue.Four)
+                    ]
+    cards = hand + community_cards
+    scorer = HandValue()
+    handValue = scorer.valueHand(cards)
+    assert handValue == 10
