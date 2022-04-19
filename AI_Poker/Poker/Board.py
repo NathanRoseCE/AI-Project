@@ -104,7 +104,8 @@ class Board:
     """
     This is the main class that tracks all of the information and runs a game
     """
-    MAX_PLAYERS=5
+    MAX_PLAYERS=30
+    
     def __init__(self,
                  players: Iterable[Player],
                  deck: Deck,
@@ -219,6 +220,7 @@ class Board:
         for player, winning in zip(self._active_players, winnings):
             player.close_hand(winning)
         self._starting_player = self._next_player_from(self.starting_player)
+        self._deck.shuffle()
 
     def is_game_over(self) -> bool:
         """
