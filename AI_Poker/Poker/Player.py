@@ -123,22 +123,22 @@ class Player:
         global_state = board.global_state
         if (global_state["current_bet"] == 0):
             #check or bet
-            decision = int(input("Either check(0) or bet(Enter amount, min bet: "+ str(global_state["big_blind"])+")"))
+            decision = int(input("Either check(0) or bet(Enter amount, min bet: "+ str(global_state["bet_min"])+")"))
             if (decision==0):
                 return self.check()
-            elif(decision>=global_state["big_blind"]):
-                self.bet(decision, global_state["big_blind"])
+            elif(decision>=global_state["bet_min"]):
+                self.bet(decision, global_state["bet_min"])
             
         elif (global_state["current_bet"]>0):
             #call or raise or fold
-            decision = int(input("Either: Fold(-1), call(0) or raise(Enter amount, min raise: "+ str(global_state["current_bet"]+global_state["big_blind"])+")"))
+            decision = int(input("Either: Fold(-1), call(0) or raise(Enter amount, min raise: "+ str(global_state["current_bet"]+global_state["bet_min"])+")"))
             if (decision==-1):
                 return self.fold()
             elif(decision==0):
                 self.call(global_state["current_bet"])
                 return decision
-            elif(decision>=global_state["current_bet"]+global_state["big_blind"]):
-                self.raise_action(global_state["current_bet"], decision, global_state["current_bet"]+global_state["big_blind"])
+            elif(decision>=global_state["current_bet"]+global_state["bet_min"]):
+                self.raise_action(global_state["current_bet"], decision, global_state["current_bet"]+global_state["bet_min"])
                 return decision
             
 
