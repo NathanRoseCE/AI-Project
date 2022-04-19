@@ -8,7 +8,6 @@ pos int is money for bet or raise
 """
 from numpy import minimum
 from AI_Poker.Poker.Card import Card
-from AI_Poker.Poker.Board import Board
 
 
 

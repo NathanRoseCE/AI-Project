@@ -24,16 +24,16 @@ class HandValue:
             self.cardSuits[card.suit]+=1
             # print()
 
-        print(self.cardValues)
-        print(self.cardSuits)
+        # print(self.cardValues)
+        # print(self.cardSuits)
 
     def sortCards(self):
         self.cards = sorted(self.cards, key = lambda x : (x.suit, x.value))
-        for card in self.cards:
-            print(card.suit, " ",card.value)
+        # for card in self.cards:
+            # print(card.suit, " ",card.value)
         
     def isRoyalFlush(self):
-        print("Royal Flush")
+        # print("Royal Flush")
         if(self.isStraightFlush()):
             for i in range(10, 15):
                 if (self.cardValues[i]==0):
@@ -43,7 +43,7 @@ class HandValue:
             return False
 
     def isStraightFlush(self):
-        print("Straight Flush")
+        # print("Straight Flush")
         straightFlushCounter = 0
         if (self.isFlush() and self.isStraight()):
             for i in range(0,len(self.cards)-1):
@@ -55,28 +55,28 @@ class HandValue:
             return False
 
     def isQuads(self):
-        print("Quads")
+        # print("Quads")
         for card in self.cardValues:
             if (self.cardValues[card]==4):
                 return True
         return False
 
     def isFullHouse(self):
-        print("Full House")
+        # print("Full House")
         if(self.isTrips() and self.isPair()):
             return True
         else:
             return False
 
     def isFlush(self):
-        print("Flush")
+        # print("Flush")
         for suit in self.cardSuits:
             if(self.cardSuits[suit]==5):
                 return True
         return False
 
     def isStraight(self):
-        print("Straight")
+        # print("Straight")
         for i in range(2, 11):
             if (self.cardValues[i]>=1):
                 straightCounter = 0
@@ -88,14 +88,14 @@ class HandValue:
         return False
 
     def isTrips(self):
-        print("Trips")
+        # print("Trips")
         for card in self.cardValues:
             if (self.cardValues[card]==3):
                 return True
         return False
 
     def isTwoPair(self):
-        print("Two Pair")
+        # print("Two Pair")
         numOfPairs = 0
         for card in self.cardValues:
             if (self.cardValues[card]==2):
@@ -103,19 +103,19 @@ class HandValue:
         return numOfPairs==2
 
     def isPair(self):
-        print("Pair")
+        # print("Pair")
         for card in self.cardValues:
             if (self.cardValues[card]==2):
                 return True
         return False
 
     def isHighCard(self):
-        print("High Card")
+        # print("High Card")
         maxValue = 0
         for card in self.cardValues:
             if (self.cardValues[card]==1 and card>maxValue):
                 maxValue=card
-        print("Highest Card is: ", maxValue)
+        # print("Highest Card is: ", maxValue)
         return True
 
     def determineHandValue(self):
