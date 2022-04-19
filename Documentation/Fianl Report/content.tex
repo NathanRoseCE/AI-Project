@@ -1,0 +1,52 @@
+\begin{document}
+
+\section{Introduction}
+This project has set out to create an AI that is able to play Texas Hold'em Poker. The goal of the AI is to make as much money as possible while playing. For this project we built a Texas Hold'em Poker game in Python and trained several AI's to play the game. We rewarded them based on how much money they earned. The more the better!
+
+Texas Hold'em Poker can be played by 2 to 9 player each with a bank of starting money. The initial setup before any play occurs is as follows: First a "dealer" button is placed in front of a player (can be one of the players physically next to the dealer), a "big blind" button is placed in front of the player to the left of the "dealer" button player, then to the "big blind" players left is the "small blind" player which receives a "small blind" button. These buttons are just tokens showing the previously mentioned words on them. They rotate clockwise after each hand is completed. Once these buttons are placed the big blind and small blind players pay their blinds and place the chips in front of them. Blinds are a set amount of money of x and 2x value. For example small blind of \$5 and a big blind of \$10. Next the dealer deals each player two cards, one at a time starting with the player with the "big blind" button in front of them. 
+
+Once the cards are dealt the first main round begins. This round consists of players initial decisions. Each player has 5 main choices when making a decision. One they can fold their hand and get rid of their cards. They are no longer in the hand. Two they can check if there is no bet they are required to match. Three they can bet an amount of money that is larger than the minimum bet and smaller or equal to what they have in their bank, if no other player has bet before them. Four, if another player has bet before them they can call the bet and match the bet with money from their bank. Five, they can raise the bet and add more money to the previous players bet. Once all the players have made their decisions and all decisions have been resolved and we reach the last player than needs to act the round is over. 
+
+Starting the second round is the dealer who burns a card then deals three of the five community cards. This is referred to as the "flop". Once the three cards are shown another round of decisions are made by the players. Once all the decisions are resolved the round is over.
+
+Starting the third round is the dealer who burns a card then deals one more community card. This is referred to as the "turn". Once the new community card is shown another round of decisions is made by the players. Once all the decisions are resolved the round is over.
+
+Starting the fourth and final round is the dealer who burns a card then deals one more community card. This is referred to as the "river". Once the new community card is shown a final round of decisions is made by the players. Once all the decisions are resolved a winner is determined. The winner is determined by the player with the best 5 card hand. The hand order is shown in INSERT HAND VALUE FIGURE. If two players have the same level of hand the one with the highest card value wins. For example if two players have straights, one player has 3,4,5,6,7 and the second player has 4,5,6,7,8 the second player would win.
+
+Some notes, play can end sooner than the fourth round if all but one player folds. If a player wants to call or raise using all their chips its called going "all in". If a player who is all in loses and has no more money in their bank they are out of the game.
+
+The AI in this case will have all the information about the current state of the game and make one of the previously discussed decisions. After a number of hands the AI will be judged and then the best performers are chosen for the next generation. This process will repeat until a set stopping criteria.
+
+
+\section{Related Work}
+
+
+
+
+\section{Approach}
+\subsection{Data/Problem Analysis}
+
+\subsection{Resources Used}
+
+\subsection{Software Design}
+
+\subsection{Source Code Description}
+
+\section{Evaluation and Results}
+
+\subsection{Results}
+
+\subsection{Results Discussion}
+
+\section{Conclusion}
+
+\section{References}
+\printbibliography
+
+\section{Appendix: Personal Contribution and Lessons Learned}
+\subsection{JP}
+
+\subsection{Nathan}
+
+
+\end{document}

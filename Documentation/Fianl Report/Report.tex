@@ -1,0 +1,156 @@
+\documentclass[11pt,bibliography=numbered]{article}
+% This file just has the formatting rules that are used everywhere else and also sets up the title page
+\usepackage{hyperref}
+% \usepackage[section]{placeins}
+\usepackage{tocloft}
+\usepackage{geometry}
+\usepackage[mmddyyyy]{datetime} %for date formatting
+\usepackage{blindtext}
+\usepackage[table, svgnames, dvipsnames]{xcolor}
+\usepackage{makecell, cellspace, caption}
+\usepackage{tabularx} % full width table
+\usepackage{tikz}
+\usepackage{letltxmacro}
+\usepackage[utf8]{inputenc}
+\usepackage{changepage}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{float}
+\usepackage[export]{adjustbox} % also loads graphicx
+
+\usepackage[backend=biber,style=ieee]{biblatex}
+\addbibresource{resources.bib}
+\usepackage{geometry}
+
+\usepackage{docmute} %has to be after biblatex
+\usepackage{import}
+\usepackage{datetime}
+\geometry{letterpaper, margin=0.5in}
+
+% formatting commands
+% Creates a formatted image with a figure tag and caption
+% 1: image filepath
+% 2: Caption
+% 3: figure label
+\newcommand\image[3]{
+  \begin{figure}[H]
+    \begin{center}
+      \makebox[\textwidth]{\includegraphics[max width=\textwidth]{#1}}
+    \end{center}
+    \caption{#2}
+    \label{#3}
+  \end{figure}
+}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  % filecolor=magenta,      
+  urlcolor=blue,
+  citecolor=black
+  % pdftitle={Overleaf Example},
+  % pdfpagemode=FullScreen,
+}
+\newcommand\defaultparindent{0cm}
+\newcommand\defaultparskip{0cm}
+\newcommand\tablePreHeading{
+  \hline
+  \rowcolor{LightGray}
+}
+\newcommand\tablePostHeadingEnd{
+  \\
+  \hline
+  
+}
+\newcommand\tableNormalEnd{
+  \\
+}
+\newcommand\tableLastEnd{
+  \\
+  \hline
+}
+\newenvironment{noParagraphSpace}{
+  \setlength{\parskip}{0cm}
+}{
+  \setlength{\parskip}{\defaultparskip}
+}
+\newenvironment{indented}{
+  \begin{adjustwidth}{1cm}{}
+  }{
+  \end{adjustwidth}
+}
+
+\titlespacing*{\section}{0pt}{1.1\baselineskip}{\baselineskip}
+
+% give every section a label of the same name
+\begin{document}
+\subimport{./}{configuration}
+\pagenumbering{roman} 
+\newdateformat{monthyeardate}{%
+  \monthname[\THEMONTH], \THEYEAR}
+\makeatletter
+\def\@maketitle{%
+  \newpage
+  \null
+  \vskip 2em%
+  \begin{center}%
+  \let \footnote \thanks
+    {\LARGE \bf \docType \par}%
+    \vskip 1.5em%
+    {\LARGE \bf \@title \par}%
+    \vskip 1.5em%
+    {\large
+      \lineskip .5em%
+      \begin{tabular}[t]{c}%
+        {\Large \@author}
+      \end{tabular}\par}%
+    \vskip 1em%
+    {\Large Version: \versionNum}%
+    \vskip 1em%
+    {\Large \monthyeardate\@date}%
+    % {\large \@date}%
+    \newpage
+  \end{center}%
+  \par
+  \vskip 1.5em}
+\makeatother
+
+\newcolumntype{1}{|l}
+\newcolumntype{2}{|l}
+\newcolumntype{3}{|l}
+\newcolumntype{4}{|l|}
+\maketitle
+\begin{center}
+  {\Large \bf Revision History}
+  \vskip 1.5em
+  \RevisionHistory
+\end{center}
+
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\newpage
+\tableofcontents
+
+\newpage
+\pagenumbering{arabic}
+
+\newcommand{\TODO}[1]{
+  {\Huge \color{red} TODO: #1}
+}
+
+% Document Defaults: 
+\newcolumntype{1}{l}
+\newcolumntype{2}{l}
+\newcolumntype{3}{l}
+\newcolumntype{4}{l}
+\setlength{\parindent}{\defaultparindent}
+\setlength{\parskip}{\defaultparskip}
+
+\LetLtxMacro{\oldsection}{\section}
+
+\makeatletter
+
+\renewcommand{\section}[1]{
+  \oldsection{#1}
+  \label{sec:#1}%
+}
+\subimport{./}{content}
+\end{document}
