@@ -57,6 +57,8 @@ class Player:
         Remove `amount` from players money
         If `amount` is greater than players money set players money to 0 
         """
+        if amount < 0:
+            return 0
         if (self.money>=amount):
             self.money -= amount
             return amount
@@ -93,10 +95,11 @@ class Player:
         Players betting action
         `bet_amount` is the amount the player is betting
         """
-        if(bet_amount>=min_bet):
-            return self.deduct_money(bet_amount)
-        else:
-            raise ValueError("Bet is too small must be at least min bet")
+        if bet_amount > self.money:
+            bet_amount = self.money
+        if bet_amount < 0:
+            bet_amount = 0
+        return self.deduct_money(bet_amount)
 
 
     def check(self):

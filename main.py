@@ -6,14 +6,31 @@ import neat
 from AI_Poker import visualize
 
 
-def evaluation(genomes, config):
+def run_batch(players) -> None:
     deck = Deck()
-    players = [NeatPlayer("neat!", 10000, genome, config) for genome_id, genome in genomes]
     board = Board(players, deck)
     for i in range(100):
         board.hand()
     for player in players:
-        player.self_evaluate()    
+        player.self_evaluate()
+
+def evaluation(genomes, config):
+    players = [
+        NeatPlayer("neat!", 10000, genome, config) for genome_id, genome in genomes
+    ]
+    num_batches = int(len(players)/20)+1
+    print(f"Running {len(players)} players in {num_batches} batches")
+    batch_size = len(players)/num_batches
+    player_batches = []
+    for batch in range(num_batches):
+        start = int(batch * batch_size)
+        stop = int((batch+1) * batch_size)
+        player_batches.append(
+            players[start:stop]
+        )
+    for i, batch in enumerate(player_batches):
+        print(f"batch {i}")
+        run_batch(batch)
 
 def main() -> None:
     local_dir = os.path.dirname(__file__)
@@ -32,7 +49,7 @@ def main() -> None:
     p.add_reporter(neat.Checkpointer(5))
 
     # Run for up to 300 generations.
-    winner = p.run(evaluation, 1)
+    winner = p.run(evaluation, 300)
 
     # Display the winning genome.
     # print('\nBest genome:\n{!s}'.format(winner))

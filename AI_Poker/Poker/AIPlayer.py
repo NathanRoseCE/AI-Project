@@ -1,4 +1,5 @@
 from AI_Poker.Poker.Player import Player
+from AI_Poker.Poker.Board import Board
 from AI_Poker.Poker.Card import Card, CardSuit, CardValue
 from typing import Iterable
 import numpy as np
@@ -13,7 +14,7 @@ class AIPlayer(Player):
         pass
 
     def decision(self, global_state):
-        return self._compute_bet(self.to_numpy(global_state))
+        return self.bet(self._compute_bet(self.to_numpy(global_state)), global_state["bet_min"])
 
     def to_numpy(self, global_state: dict) -> np.array:
         bet_min = [global_state["bet_min"]]
@@ -58,12 +59,20 @@ class AIPlayer(Player):
         return [int(card.suit), int(card.value)]
 
     def handle_player(self, player: dict) -> Iterable[float]:
-        return [int(player["folded"]), int(player["bet"])]
+        folded = int(player["folded"])
+        bet = int(player["bet"])
+        return [folded, bet]
 
     def players_to_list(self, players: Iterable[dict]) -> Iterable[float]:
-        return list(itertools.chain.from_iterable([
+        player_list =  list(itertools.chain.from_iterable([
             self.handle_player(player) for player in players
-        ])) + ( [0,0] * (len(players)-5) )
+        ]))
+        # print(f"max = {Board.MAX_PLAYERS}")
+        # print(f"num players = {len(players)}")
+        # print(f"player_list = {len(player_list)}")
+        blank = ( [0,0] * (Board.MAX_PLAYERS - len(players)) )
+        # print(f"blank slots = {len(blank)}")
+        return player_list + blank + [len(players)]
 
 
     def _compute_bet(self, algorithm_input: np.array) -> float:

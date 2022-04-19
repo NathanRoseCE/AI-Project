@@ -113,7 +113,7 @@ class Board:
                  little_blind_ammount=20
                  ) -> None:
         if len(players) > Board.MAX_PLAYERS:
-            raise ValueError(f"Cant play with more than {Board.MAX_PLAYERS}")
+            raise ValueError(f"Cant play with more than {Board.MAX_PLAYERS}: {len(players)}")
         self._active_players = [
             PlayerWrapper(player) for player in players
         ]
@@ -221,6 +221,7 @@ class Board:
             player.close_hand(winning)
         self._starting_player = self._next_player_from(self.starting_player)
         self._deck.shuffle()
+        self._pot = 0
 
     def is_game_over(self) -> bool:
         """
