@@ -1,2 +1,5 @@
 venv/
 *.pyc
+neat-checkpoint-*
+*.gv
+*.svg
