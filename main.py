@@ -7,6 +7,7 @@ import numpy as np
 from AI_Poker import visualize
 import matplotlib.pyplot as plt
 import copy
+from multiprocessing import freeze_support, Pool
 
 
 def run_batch(players) -> None:
@@ -16,9 +17,12 @@ def run_batch(players) -> None:
         board.hand()
     for player in players:
         player.self_evaluate()
+    # return [
+    #     pla
+    # ]
 
-def run_all_players_in_batches(players):
-    num_batches = int((len(players)/20)+1)
+def run_all_players_in_batches(players, players_per_batch:int=5):
+    num_batches = int((len(players)/players_per_batch)+1)
     print(f"Running {len(players)} players in {num_batches} batches")
     batch_size = len(players)/num_batches
     player_batches = []
@@ -28,6 +32,10 @@ def run_all_players_in_batches(players):
         player_batches.append(
             players[start:stop]
         )
+    # with Pool() as pool:
+    #     pool.map(run_batch, player_batches)
+    # for player in players:
+    #     print(player.money)
     for i, batch in enumerate(player_batches):
         print(f"batch {i}")
         run_batch(batch)
@@ -51,8 +59,9 @@ def winner_plot(generation_nums, generation_scores) -> None:
 
 
 def main() -> None:
-    checkpoint_every = 13
-    max_generations = 250
+    freeze_support()
+    max_generations = 10
+    checkpoint_every = int(max_generations/20)
     local_dir = os.path.dirname(__file__)
     config_file = os.path.join(local_dir, 'config-feedforward')
     config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
@@ -103,14 +112,12 @@ def main() -> None:
             board.hand()
         log_results(i, random, winner_player)
 
-    print("running generation winners")
-    run_all_players_in_batches(generation_winners)
-    print("done")
-    winner_plot(gen_numbers, [winner.money for winner in generation_winners])
+    run_all_players_in_batches(generation_winners, players_per_batch=20)
     
     visualize.draw_net(config, global_winner, True)
     visualize.plot_stats(stats, ylog=False, view=True)
     visualize.plot_species(stats, view=True)
+    winner_plot(gen_numbers, [winner.money for winner in generation_winners])
 
 def log_results(gen_number: int, random_player, winner_player) -> None:
     print(f"-- generation {gen_number} --")

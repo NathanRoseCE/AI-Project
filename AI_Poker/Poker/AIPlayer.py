@@ -88,6 +88,7 @@ class NeatPlayer(AIPlayer):
                  genome,
                  config):
         super().__init__(name, money)
+        self._start_money = money
         self._genome = genome
         self._nn = neat.nn.FeedForwardNetwork.create(genome, config)
 
@@ -100,7 +101,16 @@ class NeatPlayer(AIPlayer):
         return output[0]
 
     def self_evaluate(self) -> None:
-        self._genome.fitness = self.money
+        final_money = self.money
+        delta_money = self.total_bets
+        value_of_betting = 0.1
+        if abs(delta_money) < self._start_money/10:
+            #punish AI severely for not betting alot
+            self._genome.fitness = 0
+        else:
+            # reward the AI for taking larger bets too
+            self._genome.fitness = final_money + value_of_betting*abs(delta_money)
+        
 
 class RandomPlayer(AIPlayer):
     def __init__(self, name, money):

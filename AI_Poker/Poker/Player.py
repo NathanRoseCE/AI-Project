@@ -19,6 +19,7 @@ class Player:
         self.name = name
         self.hand = []
         self.money = money
+        self.total_bets = 0
 
 
     def setCard(self, card):
@@ -99,6 +100,7 @@ class Player:
             bet_amount = self.money
         if bet_amount < 0:
             bet_amount = 0
+        self.total_bets += bet_amount
         return self.deduct_money(bet_amount)
 
 
