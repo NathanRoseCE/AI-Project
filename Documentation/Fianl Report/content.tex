@@ -33,10 +33,18 @@ From looking into all these different approaches we decided to combine a few and
 
 \section{Approach}
 \subsection{Data/Problem Analysis}
-The data in this problem is poker hands, games and the results of them. We did not use any historical data for this solution. All data was used for the AI learning while it played the game. We valued AI that could win the most money. NATHAN MAYBE SOMETHING HERE ABOUT THE VALUE FUNCTION??? IT COULD GO LATER
+The data in this problem is poker hands, games and the results of them. We did not use any historical data for
+this solution. All data was used for the AI learning while it played the game. We valued AI that could win the
+most money. NATHAN MAYBE SOMETHING HERE ABOUT THE VALUE FUNCTION??? IT COULD GO LATER
 
 \subsection{Resources Used}
-Our programming language of choice is the same as the one from this class, Python 3. We used several libraries and they can be found in the below table \autoref{tab:libs}. The most important of these is the Neat library. The Neat library is the one that we use for the AI. NATHAN ALSO FINISH THIS PLEASE
+Our programming language of choice is the same as the one from this class, Python 3. We used several libraries
+and they can be found in the below table \autoref{tab:libs}. The most important of these is the Neat library.
+The Neat library is the one that we use for the AI. The neat library is a pure python implimentation of NEAT.
+IE theere there is no dependency on Tensorflow or anything(sadly). However it is a very solid library for NEAT,
+allowing alot of customizaiton from mutation rates and strengths, to starting network topology, activation
+functions and more!
+
 \begin{table}[H]
     \caption{Python Libraries Used}
     \centering
@@ -66,7 +74,39 @@ Our programming language of choice is the same as the one from this class, Pytho
 \subsection{Software Design}
 Our software design was a bottom up object oriented design. There is two halves to solution. One half is the poker game itself and the second half is the AI that can play the poker game. The first half, the poker game was built bottom up objected oriented starting with the basic building blocks of the poker game. First a card was implemented then a deck. From there the logic of the game was implemented in pieces where each piece added more complexity. Pieces include, players, hands, community cards, board, hand values, rounds and games etc. 
 
-Once the game was complete the next step was adding the Neat integration to create the AI player. NATHAN FINISH THIS PLEASE
+Once the game was complete the next step was adding the Neat integration to create the AI player. For the AI
+the first step was to get a basic set up of the AI, and to do this we used a NEATPlayer which is a player that
+holds a neat algorithm for playing. This player is used in order to interact the the Board(which as a reminder
+manages the game).
+
+In main.py and config-feedforward the configuration can be seen for the Neural networks, first we used the ReLU
+activation to encourage big bets, and we dont care about negative bets(and we wanted a system that can handle
+non-linear system as poker is 100\% not linear). The mutation rates are all set to 0.2, as this was a decent
+number that allowed for some mutation but still allowing the system to maintain its lead when it develops one.
+THe system is also designed to start with 30 hidden nodes, these are dense nodes that allow the system to have
+some compexity starting out to give it a chance to do something, but this model is quickly dropped as can be
+seen in some of the images. The Neural network has 74 inputs, which is alot for a small network, and this
+information ranges from the pot, to the public cards, and a variety of other factors. This is also still a
+simplification of both the rules and the information of poker and there are multiple featuers that are just not implimented.
+
+The fitness function is inside of a self_evaluate function in NeatPlayer(Not the best place I know), and the
+algorithm is as follows: \TODO{input function}
+
+In this algorithm you can see the AI is rewarded not only for winning money, but also for placing more bets
+down. This is due to the fact that one of the earlier problems occured in training was the AI would learn the
+best way to win was to just not bet at all and just hoard thier money. As a result, if the AI does not bet
+enough money it is automatically given a score of 0. However to encourage the AI to not just sneak in with betting just over the limit, I reward the AI for any bets it makes(and then if it wins money it obviously gets more
+money). This fixed the issue(along with some other fixes).
+
+At the top of the config file you can see the population size as 5000, which is a good critical mass of players
+to make sure that learning actually occurs. The threshold is just some stupid high number to make sure that the
+main.py goes through all of the generations, it is irrelvient.
+
+The number of generations is set in the main.py, and it typically ranges between 100-1000 for most testing.
+Ideally this would be much higher as NEAT can take while to get off of the ground however these tests are being
+run on my laptop during pre-finals time.... so the available computer time is limited, though a few longer
+overnight tests were run(shown below): \TODO{ dont forget to add these, or remove this comment }
+
 
 \clearpage
 % THIS WILL HAVER TO BE PLAYED WITH
@@ -112,10 +152,32 @@ Once the game was complete the next step was adding the Neat integration to crea
 \section{Evaluation and Results}
 
 \subsection{Results}
+As can be seen from the following graphs \TODO{add images}, the early models get high scores, this is because
+the scoring system is partially dependent on the performance of the other models, meaning that one lucky model
+who has a neural network that isn't trash does pretty well, but over time as all of the rest of the models get
+better the over-all score gets worse. This can be seen clearly in some of the generation performance graphs such
+as the one in \TODO{insert diagram} where the performance of the first generations are significantly worse.
+
 
 \subsection{Results Discussion}
+Also Due to the fact that the performance of other models is tied to the performance of other models, this
+means that good models can be killed off just by being a bit unlucky in both thier hand, and thier competition.
+In order to minimize this, the players were grouped into batches of 5.
+
+The size of the tests were limited not only by available computer time of the team, but also as the size and
+complexity grew, python-neat began to buckle under the weight. The ratio of time spent determining the fitness
+of each algorithm and performing the population adjustment after the generation becan to approach 1-20, where
+python-neat was taking 20 times as long. This drastically limited the scale of the tests that could be performed
+to small scale tests with limited complexity.
+
+One graph not shown, was our initial performance measure which was to compare the AI against an AI that
+performed randomly, however this did not work at all, as even very early the AI learned how to beat it even
+with mostly random movements, which was not expected
 
 \section{Conclusion}
+In conclusion, the overall model performed decently and with more computer time, and a more optimized
+NEAT library, NEAT stands a chance of performing optimally for an unknown complex game like poker. 
+
 
 
 \section{References}
@@ -129,6 +191,21 @@ For lessons learned. I learned that the power and capabilities of a poker playin
 
 One thing I did not expect was that during our training and testing of the models there was original one AI just completely destroyed the random AI. I would have expected it to take a while to learn a decently complex game. From this we put several AI players against each other instead of having the random AI and it improved all the AI players. It was really interesting to see the growth of the best AI model over generations of its development. Some times it was really clear who the best was and sometimes it was back and forth or sometimes the AI would regress in skill, which I did not think it would do.
 \subsection{Nathan}
+My contribution was as the primary coder, JP came up with the idea and scoped the project, and then I created
+the structure and coded some of the more complex areas of the code. Also I was the primary person responsible
+for integrating NEAT into Poker and ran the tests on my laptop. Tweaking of the Neural network was performed
+by me with help from JP. Then of course I assisted JP with the final documentation.
+
+Lessons As for lessons learned, I now have a new respect for competitive unsupervised learning, as it is
+difficult to rate how well you are becoming in a game like poker as in addition to the game just being complex,
+there is ALOT of chance involved that prevents accurate fitness functions. In addition the fact that the score
+is based on the other players performance not just the AI's own performance makes it a non-ideal fitness
+function, however for a game like Poker we were unable to come up with a better metric.
+
+In addition we had the idea that we could compare the initial learning against a random AI, but that turned out
+to not work very well at all, as even by generation 5, NEAT absolutey destroys the randomAI ruining our initial
+performance graphs ideas. So I guess the lesson learned from this is: always make sure you come up with multiple
+methods of measuring performnace
 
 
 \end{document}
