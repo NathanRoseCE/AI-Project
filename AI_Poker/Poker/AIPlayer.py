@@ -101,3 +101,11 @@ class NeatPlayer(AIPlayer):
 
     def self_evaluate(self) -> None:
         self._genome.fitness = self.money
+
+class RandomPlayer(AIPlayer):
+    def __init__(self, name, money):
+        super().__init__(name, money)
+        self._rng = np.random.default_rng()
+
+    def _compute_bet(self, algorithm_input: np.array) -> float:
+        return self._rng.uniform(low=0, high=self.money)
