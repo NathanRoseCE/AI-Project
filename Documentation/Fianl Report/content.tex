@@ -33,12 +33,81 @@ From looking into all these different approaches we decided to combine a few and
 
 \section{Approach}
 \subsection{Data/Problem Analysis}
+The data in this problem is poker hands, games and the results of them. We did not use any historical data for this solution. All data was used for the AI learning while it played the game. We valued AI that could win the most money. NATHAN MAYBE SOMETHING HERE ABOUT THE VALUE FUNCTION??? IT COULD GO LATER
 
 \subsection{Resources Used}
+Our programming language of choice is the same as the one from this class, Python 3. We used several libraries and they can be found in the below table \autoref{tab:libs}. The most important of these is the Neat library. The Neat library is the one that we use for the AI. NATHAN ALSO FINISH THIS PLEASE
+\begin{table}[H]
+    \caption{Python Libraries Used}
+    \centering
+    \begin{tabular}{ | l |}
+    \hline
+        Library name \\
+        \hline
+        \hline
+        numpy \\
+        itertools \\
+        tensorflow.keras \\
+        neat \\
+        logging \\
+        pytest \\
+        functools \\
+        graphvis \\
+        warnings \\
+        matplotlib.pyplot \\
+        os \\
+        copy \\
+        
+    \hline
+    \end{tabular}
+    \label{tab:libs}
+\end{table}
 
 \subsection{Software Design}
+Our software design was a bottom up object oriented design. There is two halves to solution. One half is the poker game itself and the second half is the AI that can play the poker game. The first half, the poker game was built bottom up objected oriented starting with the basic building blocks of the poker game. First a card was implemented then a deck. From there the logic of the game was implemented in pieces where each piece added more complexity. Pieces include, players, hands, community cards, board, hand values, rounds and games etc. 
+
+Once the game was complete the next step was adding the Neat integration to create the AI player. NATHAN FINISH THIS PLEASE
+
+\clearpage
+% THIS WILL HAVER TO BE PLAYED WITH
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.4]{resources/Poker_AI_-Class_Diagram.drawio.png}
+    \caption{Class Diagram for our Poker AI}
+    \label{fig:classDiagram}
+\end{figure}
+% \image{resources/Poker_AI_-Class_Diagram.drawio.png}{Class Diagram for our poker AI}{fig:classDiagram}
+
+
 
 \subsection{Source Code Description}
+\begin{table}[H]
+    \caption{Source Code Files}
+    \centering
+    \begin{tabular}{ | c | p{14cm} |}
+    \hline
+         File Name & Description \\
+        \hline
+        \hline
+        main.py & The driver of the program\\ \hline
+        visualize.py & Creates the graphs and visuals\\ \hline
+        AIPlayer.py & Implements AI Player class both random and Neat player\\ \hline
+        Board.py & Poker board (table) implementation. All the control logic for how the game is played is handled here\\ \hline
+        Card.py & A playing card implementation\\ \hline
+        Deck.py & Deck of Cards implementation\\ \hline
+        HandValue.py & Evaluator for hands value. Uses the official poker ranking for determining hand value\\ \hline
+        Player.py & Poker Player functionality. Fold, check, bet, raise, call, cards in hand and money\\
+        Mock\_player.py & \\ \hline
+        test\_AIPlayer.py & Test cases for the AIPlayer Class \\ \hline
+        test\_Board.py & Test cases for the Board Class\\ \hline
+        test\_Card.py & Test cases for the Card Class\\ \hline
+        test\_Deck.py & Test cases for the Deck Class\\ \hline
+        test\_HandValue.py & Test cases for the HandValue Class\\
+        
+    \hline
+    \end{tabular}
+    \label{tab:sourceCode}
+\end{table}
 
 \section{Evaluation and Results}
 
@@ -48,12 +117,17 @@ From looking into all these different approaches we decided to combine a few and
 
 \section{Conclusion}
 
+
 \section{References}
 \printbibliography
 
 \section{Appendix: Personal Contribution and Lessons Learned}
 \subsection{JP}
+My personal contributions were to the brainstorming and deciding on the topic for the project, helping design the implementation of Texas Hold'em Poker in Python 3, creating and formatting the presentation, creating and the initial formatting of the final report. Writing the introduction, related works, a portion of the approach section, created the class diagram, creating the file description table, compiling the libraries used table. For the implementation I specifically wrote the hand value and player classes for the Texas Hold'em Poker Game as well as the tests for these class.
 
+For lessons learned. I learned that the power and capabilities of a poker playing AI is really interesting and hard to get a complete one working. I discovered this while reading all the previous research and seeing how far they have come but also how far they have to go. The idea of an imperfection information problem is nothing new to humans and I believe we are uniquely suited for that kind of problem but computers are not. They are designed for complete information problems. When dealing with incomplete information problems with computers is where the human inspired neural networks come into play and they have had the most success in these problems. Early computers were just not powerful enough. So knowing where they came from to see Nathan and I be able to create pretty decent Texas Hold'em AI players is pretty neat (pun intended). Although we used a slightly simplified version it is still really rewarding to see the outcome. 
+
+One thing I did not expect was that during our training and testing of the models there was original one AI just completely destroyed the random AI. I would have expected it to take a while to learn a decently complex game. From this we put several AI players against each other instead of having the random AI and it improved all the AI players. It was really interesting to see the growth of the best AI model over generations of its development. Some times it was really clear who the best was and sometimes it was back and forth or sometimes the AI would regress in skill, which I did not think it would do.
 \subsection{Nathan}
 
 
