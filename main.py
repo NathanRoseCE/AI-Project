@@ -15,11 +15,9 @@ def run_batch(players) -> None:
     board = Board(players, deck)
     for i in range(100):
         board.hand()
-    for player in players:
-        player.self_evaluate()
-    # return [
-    #     pla
-    # ]
+    return [
+        player.self_evaluate() for player in players
+    ]
 
 def run_all_players_in_batches(players, players_per_batch:int=5):
     num_batches = int((len(players)/players_per_batch)+1)
@@ -32,13 +30,17 @@ def run_all_players_in_batches(players, players_per_batch:int=5):
         player_batches.append(
             players[start:stop]
         )
-    # with Pool() as pool:
-    #     pool.map(run_batch, player_batches)
-    # for player in players:
-    #     print(player.money)
-    for i, batch in enumerate(player_batches):
-        print(f"batch {i}")
-        run_batch(batch)
+    if stop != len(players):
+        lost_batch = []
+        for i in np.arange(start=stop, stop=len(players)):
+            lost_batch.append(players[i])
+        player_batches.append(lost_batch)
+            
+    with Pool() as pool:
+        batch_results = pool.map(run_batch, player_batches)
+    for players, batch_result in zip(player_batches, batch_results):
+        for player, result in zip(players, batch_result):
+            player._genome.fitness = result
         
 def evaluation(genomes, config):
     players = [
@@ -60,8 +62,8 @@ def winner_plot(generation_nums, generation_scores) -> None:
 
 def main() -> None:
     freeze_support()
-    max_generations = 10
-    checkpoint_every = int(max_generations/20)
+    max_generations = 200
+    checkpoint_every = int(max_generations/200)
     local_dir = os.path.dirname(__file__)
     config_file = os.path.join(local_dir, 'config-feedforward')
     config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
@@ -96,6 +98,7 @@ def main() -> None:
     generation_winners = []
     gen_numbers = []
     for i in np.arange(start=checkpoint_every-1, stop=max_generations, step=checkpoint_every):
+        print(f"determining winner from generation: {i}")
         checkpoint_file = f'neat-checkpoint-{i}'
         gen_numbers.append(i)
         p = neat.Checkpointer.restore_checkpoint(checkpoint_file)
@@ -105,24 +108,14 @@ def main() -> None:
         generation_winners.append(
             NeatPlayer(f"neat!-{i}", 10000, winner, config)
         )
-        random = RandomPlayer("random", 10000)
-        players = [random, winner_player] 
-        board = Board(players, deck)
-        for _ in range(10):
-            board.hand()
-        log_results(i, random, winner_player)
 
     run_all_players_in_batches(generation_winners, players_per_batch=20)
     
     visualize.draw_net(config, global_winner, True)
     visualize.plot_stats(stats, ylog=False, view=True)
     visualize.plot_species(stats, view=True)
-    winner_plot(gen_numbers, [winner.money for winner in generation_winners])
+    winner_plot(gen_numbers, [winner._genome.fitness for winner in generation_winners])
 
-def log_results(gen_number: int, random_player, winner_player) -> None:
-    print(f"-- generation {gen_number} --")
-    print(f"random end: {random_player.money}")
-    print(f"winner end: {winner_player.money}")
                      
 
 if __name__ == '__main__':

@@ -104,12 +104,14 @@ class NeatPlayer(AIPlayer):
         final_money = self.money
         delta_money = self.total_bets
         value_of_betting = 0.1
+        fitness = 0
         if abs(delta_money) < self._start_money/10:
             #punish AI severely for not betting alot
-            self._genome.fitness = 0
+            fitness = 0
         else:
             # reward the AI for taking larger bets too
-            self._genome.fitness = final_money + value_of_betting*abs(delta_money)
+            fitness = final_money + value_of_betting*abs(delta_money)
+        return fitness
         
 
 class RandomPlayer(AIPlayer):
