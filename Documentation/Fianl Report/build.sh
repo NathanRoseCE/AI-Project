@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-pdflatex Report && biber Report && pdflatex Report && pdflatex Report
+pdflatex -shell-escape Report && biber Report && pdflatex -shell-escape Report && pdflatex -shell-escape Report

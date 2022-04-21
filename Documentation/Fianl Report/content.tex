@@ -11,7 +11,7 @@ Starting the second round is the dealer who burns a card then deals three of the
 
 Starting the third round is the dealer who burns a card then deals one more community card. This is referred to as the "turn". Once the new community card is shown another round of decisions is made by the players. Once all the decisions are resolved the round is over.
 
-Starting the fourth and final round is the dealer who burns a card then deals one more community card. This is referred to as the "river". Once the new community card is shown a final round of decisions is made by the players. Once all the decisions are resolved a winner is determined. The winner is determined by the player with the best 5 card hand. The hand order is shown in INSERT HAND VALUE FIGURE. If two players have the same level of hand the one with the highest card value wins. For example if two players have straights, one player has 3,4,5,6,7 and the second player has 4,5,6,7,8 the second player would win.
+Starting the fourth and final round is the dealer who burns a card then deals one more community card. This is referred to as the "river". Once the new community card is shown a final round of decisions is made by the players. Once all the decisions are resolved a winner is determined. The winner is determined by the player with the best 5 card hand. The hand order is shown in \TODO{INSERT HAND VALUE FIGURE}. If two players have the same level of hand the one with the highest card value wins. For example if two players have straights, one player has 3,4,5,6,7 and the second player has 4,5,6,7,8 the second player would win.
 
 Some notes, play can end sooner than the fourth round if all but one player folds. If a player wants to call or raise using all their chips its called going "all in". If a player who is all in loses and has no more money in their bank they are out of the game.
 
@@ -82,15 +82,29 @@ manages the game).
 In main.py and config-feedforward the configuration can be seen for the Neural networks, first we used the ReLU
 activation to encourage big bets, and we dont care about negative bets(and we wanted a system that can handle
 non-linear system as poker is 100\% not linear). The mutation rates are all set to 0.2, as this was a decent
-number that allowed for some mutation but still allowing the system to maintain its lead when it develops one.
-THe system is also designed to start with 30 hidden nodes, these are dense nodes that allow the system to have
+number that allowed for some mutation but not so high that innovations are lost.
+The system is also designed to start with 10 hidden nodes, these are dense nodes that allow the system to have
 some compexity starting out to give it a chance to do something, but this model is quickly dropped as can be
 seen in some of the images. The Neural network has 74 inputs, which is alot for a small network, and this
 information ranges from the pot, to the public cards, and a variety of other factors. This is also still a
 simplification of both the rules and the information of poker and there are multiple featuers that are just not implimented.
 
 The fitness function is inside of a self\_evaluate function in NeatPlayer(Not the best place I know), and the
-algorithm is as follows: \TODO{input function}
+algorithm is as follows: 
+\begin{minted}{python}
+def self_evaluate(self) -> None:
+    final_money = self.money
+    delta_money = self.total_bets
+    value_of_betting = 0.1
+    fitness = 0
+    if abs(delta_money) < self._start_money/10:
+        #punish AI severely for not betting alot
+        fitness = 0
+    else:
+        # reward the AI for taking larger bets too
+        fitness = final_money + value_of_betting*abs(delta_money)
+    return fitness
+\end{minted}
 
 In this algorithm you can see the AI is rewarded not only for winning money, but also for placing more bets
 down. This is due to the fact that one of the earlier problems occured in training was the AI would learn the
@@ -104,9 +118,20 @@ main.py goes through all of the generations, it is irrelvient.
 
 The number of generations is set in the main.py, and it typically ranges between 100-1000 for most testing.
 Ideally this would be much higher as NEAT can take while to get off of the ground however these tests are being
-run on my laptop during pre-finals time.... so the available computer time is limited, though a few longer
-overnight tests were run(shown below): \TODO{ dont forget to add these, or remove this comment }
+run on my laptop during pre-finals time.... so the available computer time is limited.
 
+Finally, a large emphasis was placed on implimented Test Driven Development\TODO{ probably make a link} in order
+to create more reliable software that we know is working as intended. This was especially important for writing
+the rules of Poker which are complex and ensuring the intended behavoir was correctly implimented can be
+incredibly time consuming. As a result of this, we implimented a Test Suite with pytest. All tests for the
+codebase can be run by using the pytest command in the terminal at the root of the project.
+\begin{minted}{bash}
+ $ pytest
+\end{minted}
+
+This allows the team to be confident that the software written is correct and new additions do not
+unintentionall break older changes, giving the team greater development throughput especially towards the end
+of the project
 
 \clearpage
 % THIS WILL HAVER TO BE PLAYED WITH
@@ -152,27 +177,49 @@ overnight tests were run(shown below): \TODO{ dont forget to add these, or remov
 \section{Evaluation and Results}
 
 \subsection{Results}
-As can be seen from the following graphs \TODO{add images}, the early models get high scores, this is because
-the scoring system is partially dependent on the performance of the other models, meaning that one lucky model
-who has a neural network that isn't trash does pretty well, but over time as all of the rest of the models get
-better the over-all score gets worse. This can be seen clearly in some of the generation performance graphs such
-as the one in \TODO{insert diagram} where the performance of the first generations are significantly worse.
+There are two important graphs that come out of training in order to determine how the system performed over
+time. These are: the fitness over generations, which plots the fitness score over time, then there is the
+generation comparison which plots the results of a generation comparison game that is played at the end of
+training. THe reason for this second graph is two-fold: first, it allows a direct comparison between the various
+models to be done to show any learning over time, second it allows us to verify the fitness function is
+producing the desired results because as was discussed in the software architecture there were issues with the
+fitness function encouraging the AI's to not bet. Howver this means that the fitness function is not the true
+metric we were really looking for and as a result, we wanted to check the final output to make sure the AI was
+still winning.
+
+\image{resources/generation_comparison.png}{Generation Comparison}{fig:genComp}
+\image{resources/Fitness_over_time.png}{Fitness over the generations}{fig:fitness}
 
 
 \subsection{Results Discussion}
-Also Due to the fact that the performance of other models is tied to the performance of other models, this
-means that good models can be killed off just by being a bit unlucky in both thier hand, and thier competition.
-In order to minimize this, the players were grouped into batches of 5.
+As can be seen in the graph, in the \autoref{fig:fitness} the earlier models seem to be much better than the
+final models as thier fitness is much higher, however it is important to note that in poker, the fitness
+score is relative to the other players, meaning that at the start, when players are random and some are just by
+chance by chance better or luckier there is a good chance of players being able to just steal other-players out
+of money, resulting in not only high bets but also lots of money won.
 
-The size of the tests were limited not only by available computer time of the team, but also as the size and
-complexity grew, python-neat began to buckle under the weight. The ratio of time spent determining the fitness
-of each algorithm and performing the population adjustment after the generation becan to approach 1-20, where
-python-neat was taking 20 times as long. This drastically limited the scale of the tests that could be performed
-to small scale tests with limited complexity.
+However over time as the general population becomes not terrible at poker, the overall fitness goes down. This
+hypothesis is also shown in the generation comparison, as the initial AI, despite having a very high score,
+performs very poorly against later versions as it was likely a combination of luck and per performance of the
+other models that allowed the early models to succeed.
 
-One graph not shown, was our initial performance measure which was to compare the AI against an AI that
-performed randomly, however this did not work at all, as even very early the AI learned how to beat it even
-with mostly random movements, which was not expected
+You will also note that the generation limit and population sizes are rather low for a NEAT algorithm, which
+causes a signifcantly lower learning rate as NEAT usually needs a critical mass of players in order for learning
+to occur, This is down to a few factors discussed below.
+
+The first issue is limitations in computation time, as this analysis was mostly performed in the pre-finals time
+on a team-members laptop, which meant laptop-time was in high demand. In attemps to optimize the codebase in
+order to run higher populations and more generations in less time, we ran into the issue of the python-NEAT
+library hitting hard performance limits, as it was not meant for a game as complex as poker in such a confined
+time environment, and despite the fact that the poker game could run 100s of batches with 1000s of players in
+less than a second, the neat-AI library would then take a minute or two to perform mutations and other
+necessary functions for that generations, which essentially put a cap on the size of the population that could
+be performed.
+
+One graph not shown as it turned out to not be relevant was the performance of the AI against a random player,
+this is because even by generation 5 with a small-ish population, the Neat-AI absolutely robs that player of all
+of thier money and causes them to lose, so the graph was two horizontal lines, one with the neat-ai player
+that had all the money, and one with the random player with no money
 
 \section{Conclusion}
 In conclusion, the overall model performed decently and with more computer time, and a more optimized
