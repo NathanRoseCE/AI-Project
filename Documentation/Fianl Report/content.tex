@@ -11,7 +11,16 @@ Starting the second round is the dealer who burns a card then deals three of the
 
 Starting the third round is the dealer who burns a card then deals one more community card. This is referred to as the "turn". Once the new community card is shown another round of decisions is made by the players. Once all the decisions are resolved the round is over.
 
-Starting the fourth and final round is the dealer who burns a card then deals one more community card. This is referred to as the "river". Once the new community card is shown a final round of decisions is made by the players. Once all the decisions are resolved a winner is determined. The winner is determined by the player with the best 5 card hand. The hand order is shown in \TODO{INSERT HAND VALUE FIGURE}. If two players have the same level of hand the one with the highest card value wins. For example if two players have straights, one player has 3,4,5,6,7 and the second player has 4,5,6,7,8 the second player would win.
+Starting the fourth and final round is the dealer who burns a card then deals one more community card. This is referred to as the "river". Once the new community card is shown a final round of decisions is made by the players. Once all the decisions are resolved a winner is determined. The winner is determined by the player with the best 5 card hand. The hand order is shown in \autoref{fig:handRanks}. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{resources/Official-Poker-Hand-Rankings-Chart.png}
+    \caption{Poker Hand Rankings}
+    \label{fig:handRanks}
+\end{figure}
+
+If two players have the same level of hand the one with the highest card value wins. For example if two players have straights, one player has 3,4,5,6,7 and the second player has 4,5,6,7,8 the second player would win.
 
 Some notes, play can end sooner than the fourth round if all but one player folds. If a player wants to call or raise using all their chips its called going "all in". If a player who is all in loses and has no more money in their bank they are out of the game.
 
@@ -41,7 +50,7 @@ most money. NATHAN MAYBE SOMETHING HERE ABOUT THE VALUE FUNCTION??? IT COULD GO 
 Our programming language of choice is the same as the one from this class, Python 3. We used several libraries
 and they can be found in the below table \autoref{tab:libs}. The most important of these is the Neat library.
 The Neat library is the one that we use for the AI. The neat library is a pure python implimentation of NEAT.
-IE theere there is no dependency on Tensorflow or anything(sadly). However it is a very solid library for NEAT,
+IE there there is no dependency on Tensorflow or anything(sadly). However it is a very solid library for NEAT,
 allowing alot of customizaiton from mutation rates and strengths, to starting network topology, activation
 functions and more!
 
@@ -180,10 +189,10 @@ of the project
 There are two important graphs that come out of training in order to determine how the system performed over
 time. These are: the fitness over generations, which plots the fitness score over time, then there is the
 generation comparison which plots the results of a generation comparison game that is played at the end of
-training. THe reason for this second graph is two-fold: first, it allows a direct comparison between the various
+training. The reason for this second graph is two-fold: first, it allows a direct comparison between the various
 models to be done to show any learning over time, second it allows us to verify the fitness function is
 producing the desired results because as was discussed in the software architecture there were issues with the
-fitness function encouraging the AI's to not bet. Howver this means that the fitness function is not the true
+fitness function encouraging the AI's to not bet. However this means that the fitness function is not the true
 metric we were really looking for and as a result, we wanted to check the final output to make sure the AI was
 still winning.
 
@@ -192,7 +201,7 @@ still winning.
 
 
 \subsection{Results Discussion}
-As can be seen in the graph, in the \autoref{fig:fitness} the earlier models seem to be much better than the
+As can be seen in the graph, in \autoref{fig:fitness} the earlier models seem to be much better than the
 final models as thier fitness is much higher, however it is important to note that in poker, the fitness
 score is relative to the other players, meaning that at the start, when players are random and some are just by
 chance by chance better or luckier there is a good chance of players being able to just steal other-players out
@@ -200,7 +209,7 @@ of money, resulting in not only high bets but also lots of money won.
 
 However over time as the general population becomes not terrible at poker, the overall fitness goes down. This
 hypothesis is also shown in the generation comparison, as the initial AI, despite having a very high score,
-performs very poorly against later versions as it was likely a combination of luck and per performance of the
+performs very poorly against later versions as it was likely a combination of luck and poor performance of the
 other models that allowed the early models to succeed.
 
 You will also note that the generation limit and population sizes are rather low for a NEAT algorithm, which
