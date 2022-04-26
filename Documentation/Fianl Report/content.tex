@@ -11,7 +11,7 @@ Starting the second round is the dealer who burns a card then deals three of the
 
 Starting the third round is the dealer who burns a card then deals one more community card. This is referred to as the "turn". Once the new community card is shown another round of decisions is made by the players. Once all the decisions are resolved the round is over.
 
-Starting the fourth and final round is the dealer who burns a card then deals one more community card. This is referred to as the "river". Once the new community card is shown a final round of decisions is made by the players. Once all the decisions are resolved a winner is determined. The winner is determined by the player with the best 5 card hand. The hand order is shown in \TODO{INSERT HAND VALUE FIGURE}. If two players have the same level of hand the one with the highest card value wins. For example if two players have straights, one player has 3,4,5,6,7 and the second player has 4,5,6,7,8 the second player would win.
+Starting the fourth and final round is the dealer who burns a card then deals one more community card. This is referred to as the "river". Once the new community card is shown a final round of decisions is made by the players. Once all the decisions are resolved a winner is determined. The winner is determined by the player with the best 5 card hand. If two players have the same level of hand the one with the highest card value wins. For example if two players have straights, one player has 3,4,5,6,7 and the second player has 4,5,6,7,8 the second player would win.
 
 Some notes, play can end sooner than the fourth round if all but one player folds. If a player wants to call or raise using all their chips its called going "all in". If a player who is all in loses and has no more money in their bank they are out of the game.
 
@@ -36,6 +36,24 @@ From looking into all these different approaches we decided to combine a few and
 The data in this problem is poker hands, games and the results of them. We did not use any historical data for
 this solution. All data was used for the AI learning while it played the game. We valued AI that could win the
 most money. NATHAN MAYBE SOMETHING HERE ABOUT THE VALUE FUNCTION??? IT COULD GO LATER
+
+The fitness function is inside of a self\_evaluate function in NeatPlayer(Not the best place I know), and the
+algorithm is as follows: 
+\begin{minted}{python}
+def self_evaluate(self) -> None:
+    final_money = self.money
+    delta_money = self.total_bets
+    value_of_betting = 0.1
+    fitness = 0
+    if abs(delta_money) < self._start_money/10:
+        #punish AI severely for not betting alot
+        fitness = 0
+    else:
+        # reward the AI for taking larger bets too
+        fitness = final_money + value_of_betting*abs(delta_money)
+    return fitness
+\end{minted}
+
 
 \subsection{Resources Used}
 Our programming language of choice is the same as the one from this class, Python 3. We used several libraries
@@ -88,24 +106,7 @@ some compexity starting out to give it a chance to do something, but this model 
 seen in some of the images. The Neural network has 74 inputs, which is alot for a small network, and this
 information ranges from the pot, to the public cards, and a variety of other factors. This is also still a
 simplification of both the rules and the information of poker and there are multiple featuers that are just not implimented.
-
-The fitness function is inside of a self\_evaluate function in NeatPlayer(Not the best place I know), and the
-algorithm is as follows: 
-\begin{minted}{python}
-def self_evaluate(self) -> None:
-    final_money = self.money
-    delta_money = self.total_bets
-    value_of_betting = 0.1
-    fitness = 0
-    if abs(delta_money) < self._start_money/10:
-        #punish AI severely for not betting alot
-        fitness = 0
-    else:
-        # reward the AI for taking larger bets too
-        fitness = final_money + value_of_betting*abs(delta_money)
-    return fitness
-\end{minted}
-
+S
 In this algorithm you can see the AI is rewarded not only for winning money, but also for placing more bets
 down. This is due to the fact that one of the earlier problems occured in training was the AI would learn the
 best way to win was to just not bet at all and just hoard thier money. As a result, if the AI does not bet
@@ -120,7 +121,7 @@ The number of generations is set in the main.py, and it typically ranges between
 Ideally this would be much higher as NEAT can take while to get off of the ground however these tests are being
 run on my laptop during pre-finals time.... so the available computer time is limited.
 
-Finally, a large emphasis was placed on implimented Test Driven Development\TODO{ probably make a link} in order
+Finally, a large emphasis was placed on implimented Test Driven Development in order
 to create more reliable software that we know is working as intended. This was especially important for writing
 the rules of Poker which are complex and ensuring the intended behavoir was correctly implimented can be
 incredibly time consuming. As a result of this, we implimented a Test Suite with pytest. All tests for the
